@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cms" default="makeWar" basedir=".">
+	
+	<target name="deploy" description="build and deploy the war file">
+		<delete dir="/usr/share/tomcat7/webapps/cms"></delete>
+		<delete file="/usr/share/tomcat7/webapps/cms.war"></delete>
+		<antcall target="makeWar"></antcall>
+		<move file="/home/ruben/Documents/Java/workspace/cms/dist/cms.war" todir="/usr/share/tomcat7/webapps"></move>
+	</target>
+	
+	<target name="makeWar">
+		<mkdir dir="dist"/>
+		<war destfile="dist/cms.war" needxmlfile="false">
+			<fileset dir="WebContent">
+				<include name="**/*.*"/>
+			</fileset>
+			<classes dir="build/classes"/>
+		</war>
+	</target>
+
+	<!-- <target name="makeJar">
+		<mkdir dir="dist"/>
+		<jar destfile="dist/cms.jar">
+			<fileset dir="build"/>
+			<metainf dir="WebContent/META-INF" includes="persistence.xml"/>
+		</jar>
+	</target> -->
+	
+
+</project>
