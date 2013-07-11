@@ -24,7 +24,7 @@ public class GeneralUtil {
 		 
 		BufferedReader br = null;
 		StringBuilder sb = new StringBuilder();
- 
+
 		String line;
 		try {
  

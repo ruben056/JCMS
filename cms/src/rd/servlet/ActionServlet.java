@@ -45,7 +45,8 @@ public abstract class ActionServlet extends HttpServlet {
 		}
 	}
 	
-	protected abstract JSonResult performAction(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws IOException;
+	protected abstract JSonResult performAction(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) 
+			throws IOException, ServletException;
 	
 	protected String getAction(HttpServletRequest req){
 		return req.getParameter("action");

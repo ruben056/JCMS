@@ -1,35 +1,24 @@
+<%@page import="rd.mgr.user.User"%>
+<%@page import="rd.util.GeneralUtil"%>
+<%@page import="rd.util.ComponentFactory"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-
-String user = request.getParameter("email");
-String pass = request.getParameter("password");
-
-//TODO check username from db
-if(user != null && user.equals("demuynck_ruben@hotmail.com") 
-	&& pass != null && pass.equals("zimzimma")){
-	// TODO set list of all userroles
-	session.setAttribute("role", new String[]{"admin"});
-	response.sendRedirect("/cms/admin");
-}
-
-%>
+<% String path =  getServletContext().getContextPath();%>    
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
-<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/themes/south-street/jquery-ui.css" />
-<script src="js/login.js"></script>
-<link rel="stylesheet" type="text/css" href="css/login.css" />
+<script	src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script	src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script src="<%=path %>/js/login.js"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+<link rel="stylesheet" href="<%=path %>/css/login.css" />
 <title>Administrator Login</title>
 </head>
 <body>
 
 <div class="tabs">
-		,
 		<ul>
 			<li><a href="#tab1">Login</a>
 			</li>
@@ -37,7 +26,7 @@ if(user != null && user.equals("demuynck_ruben@hotmail.com")
 			</li>
 		</ul>
 		<div id="tab1">
-			<form method="post"action="login.jsp">
+			<form method="post" action="/cms/users/login">
 				<table>
 					<tr>
 						<th>email</th>
@@ -45,11 +34,15 @@ if(user != null && user.equals("demuynck_ruben@hotmail.com")
 					</tr>
 					<tr>
 						<th>password</th>
-						<td><input type="password" name="password" /></td>
+						<td><input type="password" id="password" name="password" /></td>
 					</tr>
 <!-- 					<tr id="captcha"> -->
 <!-- 						<th>captcha</th> -->
-						<td><?php echo $captcha; ?></td>
+<!-- 						<td> 
+
+-->
+						
+<!-- 						</td> -->
 <!-- 					</tr> -->
 					<tr>
 						<th colspan="2" align="right"><input name="action" type="submit"

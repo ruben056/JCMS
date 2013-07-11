@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import rd.mgr.page.Page;
+import rd.mgr.page.selection.GetOptionsForParentCBO;
 import rd.mgr.page.selection.GetPageHierarchy;
 import rd.servlet.ActionServlet;
 import rd.servlet.JSonResult;
-import rd.servlet.page.selection.GetOptionsForParentCBO;
 import rd.util.GeneralUtil;
 import rd.util.ISpecialSelection;
 
@@ -117,7 +117,7 @@ public class PageController extends ActionServlet {
 		long pageId = 0;
 		Object o = req.getParameter("id");
 		if(o != null){
-			Long.parseLong((String)o);
+			pageId = Long.parseLong((String)o);
 		}
 		sel.setPageID(pageId);
 		return sel.performSelection(eMgr);

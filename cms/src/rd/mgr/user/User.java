@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -17,13 +18,16 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="user_accounts")
-@NamedQuery(name="User.findAll",query="SELECT u FROM User u")
+@NamedQueries({
+	@NamedQuery(name="User.findAll",query="SELECT u FROM User u"),
+	@NamedQuery(name="User.findByEmail", query="SELECT u FROM User u where email =:email")
+})
 public class User {
 
 	@Id
 	@GeneratedValue(generator="increment")
 	@GenericGenerator(name="increment", strategy="increment")
-	private int id;
+	private long id;
 	private String email;
 	private String password;
 	private boolean active = false;
@@ -48,10 +52,10 @@ public class User {
 		this.password = pass;
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getEmail() {

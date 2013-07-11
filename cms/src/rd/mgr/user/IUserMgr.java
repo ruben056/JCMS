@@ -14,4 +14,5 @@ public interface IUserMgr {
 	public User[] getAllUsers(EntityManager eMgr);
 	public User saveUser(EntityManager eMgr, User usr);
 	public User[] saveUsers(EntityManager eMgr, User[] usrs);
+	public User getUserByEmail(EntityManager eMgr, String email);
 }

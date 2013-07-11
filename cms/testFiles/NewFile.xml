@@ -1,0 +1,18 @@
+<div class='menu-fg menu-fg-horizontal' id='menu-fg-0' style='width:200px'>
+	<ul id='rdMenu'>
+		<li>
+			<a href='/cms/public/testPage1'>testPage1</a>
+		</li>
+		<li>
+			<a href='/cms/public/testPage2'>testPage2</a>
+			<ul>
+				<li>
+					<a href='/cms/public/testPage2/testPage2-child1'>testPage2-child1</a>
+				</li>
+				<li>
+					<a href='/cms/public/testPage2/testPage2-child2'>testPage2-child2</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div>

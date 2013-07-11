@@ -328,8 +328,14 @@ $(function() {
 //		$('div#vakata-contextmenu').remove();
 		$('div#ui-datepicker-div').remove();
 		
-		$wrapper.append($('<h1>Logout TODO</h1>'));
-		
+		$wrapper.append($('<h1>Logout</h1>'));
+		$.ajax({
+			type: "post",
+			url: "/cms/users/logout"
+		}).done(function(e){
+			$wrapper.append("<h2> logged out </h2>");
+			document.location.href="/cms/admin";
+		});
 		e.preventDefault();
 		return false;
 	});
@@ -581,6 +587,31 @@ function PageMgmt($leftMenu, $hasLeftMenu) {
 			var $pageLink = $("#tabs-common-details a#viewPage");
 			$pageLink.hide();
 			$(".tabs").tabs();
+			
+//			var $thePageForm = $("form#pages_form");
+//			var changeTooltipPosition = function(event) {
+//			  $('div.ui-tooltip').css({top: event.pageY -5});
+//			  if(event.pageX <= $thePageForm.offset().left -50){
+//				  hideTooltip();
+//			  }else{
+//				  
+//			  }
+//			};
+//			var showTooltip = function(event) {
+//				$('div.ui-tooltip').remove();
+//				var $tip = $('<div class="ui-tooltip">Save</div>');
+////				$tip.addClass(".ui-tooltip");
+//				$tip.appendTo('body').css({left: $thePageForm.offset().left + 100});
+//				changeTooltipPosition(event);
+//			};
+//			var hideTooltip = function() {
+//			   $('div.ui-tooltip').remove();
+//			};
+//			$thePageForm.bind({
+//				   mousemove : changeTooltipPosition//,
+////				   mouseenter : showTooltip,
+////				   mouseleave : hideTooltip
+//				});
 			that.fillParentPagesList(currentpageid);
 			that.formAction();
 			CKEDITOR.replace( 'body',
@@ -754,7 +785,6 @@ function PageMgmt($leftMenu, $hasLeftMenu) {
 						$pageLink.hide();
 						$aDate.val("");
 						that.fillParentPagesList(0);
-						$body.val("");
 						
 						// ADVANCED TAB
 						$kw.val("");

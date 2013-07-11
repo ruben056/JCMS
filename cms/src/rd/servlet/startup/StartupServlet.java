@@ -48,22 +48,22 @@ public class StartupServlet extends HttpServlet {
 		// create some pages first
 		Page[] pages = new Page[4];
 		pages[0] = new Page("testPage1", "den titel");
-		pages[0].setBody("<h1> blabla bal </h1>");
+		pages[0].setBody("<h1> page1 </h1>");
 		pages[0].setParentID(0);
 		pages[0].setOrd(1);
 		
 		pages[1] = new Page("testPage2", "ook root normaal");
-		pages[1].setBody("<h1> blabla bal </h1>");
+		pages[1].setBody("<h1> Page2</h1>");
 		pages[1].setParentID(0);
 		pages[1].setOrd(2);
 		
 		pages[2] = new Page("testPage2-child1");
-		pages[2].setBody("<h1> blabla bal </h1>");
+		pages[2].setBody("<h1> child1 </h1>");
 		pages[2].setParentID(2);
 		pages[2].setOrd(1);
 		
 		pages[3] = new Page("testPage2-child2");
-		pages[3].setBody("<h1> blabla bal </h1>");
+		pages[3].setBody("<h1> child2 </h1>");
 		pages[3].setParentID(2);
 		pages[3].setOrd(2);
 		
@@ -128,8 +128,7 @@ public class StartupServlet extends HttpServlet {
 		newUsers[1].setActive(false);
 		newUsers[0].addGroup(grps[1]);
 	}
-	
-	
+		
 	private IUserMgr getUserMgr(){
 		return ComponentFactory.getUserMgr();
 	}

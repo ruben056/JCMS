@@ -3,14 +3,18 @@ package rd.mgr.page;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import rd.util.ComponentFactory;
 
 
 @Entity
@@ -37,7 +41,7 @@ public class Page {
 	@Lob
 	private String body;
 	private String template;
-	private String type;
+	private int type = 1;
 	private String keywords;
 	private String description;
 	private Date associatedDate;
@@ -97,10 +101,10 @@ public class Page {
 	public void setTemplate(String template) {
 		this.template = template;
 	}
-	public String getType() {
+	public int getType() {
 		return type;
 	}
-	public void setType(String type) {
+	public void setType(int type) {
 		this.type = type;
 	}
 	public String getKeywords() {
@@ -150,5 +154,35 @@ public class Page {
 	}
 	public void setEdate(Date edate) {
 		this.edate = edate;
+	}
+	
+	/**
+	 * returns a hierarchical url: grandparenurl/parenturl/pageurl
+	 */
+	@Transient
+	private String relativeURL = null;
+	public String getRelativeURL(EntityManager eMgr){
+		if(this.relativeURL == null){
+		
+			if(parentID != 0){
+				Page parent = ComponentFactory.getPageMgr().getPageById(eMgr, this.getParentID());
+				this.relativeURL = parent.getRelativeURL(eMgr);
+			}else{
+				this.relativeURL = "/cms/public"; //this is depending on the context
+			}
+			
+			this.relativeURL = this.relativeURL +"/" + this.getURLSafeName();
+			
+		}
+		return relativeURL;
+	}
+	@Transient
+	private String urlSafeName=null;
+	public String getURLSafeName(){
+		if(urlSafeName == null){
+			urlSafeName = this.name;
+			urlSafeName = urlSafeName.replace("/[^a-zA-Z0-9,-]/","-");
+		}
+		return urlSafeName;
 	}
 }

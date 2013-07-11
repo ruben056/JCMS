@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+<header>
+	<title>den titel</title>
+	<script src='http://code.jquery.com/jquery-1.9.1.js'></script>
+	<script src='http://code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
+	<link rel='stylesheet'
+		href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' />
+	<link rel='stylesheet' href='/cms/css/main.css' />
+	<link rel='stylesheet' href='/cms/css/widgets/menu.css' />
+	<script src='http://www.google.com/jsapi'></script>
+	<script>
+		google.load('mootools', '1.2.1');
+	</script>
+	<script src='/cms/js/MenuMatic_0.68.3-source.js'></script>
+</header>
+<body>
+	<div id='pageWrapper'>
+		<ul id='nav'>
+			<li><a href='/cms/public/testPage1'>testPage1</a></li>
+			<li>
+			<a href='/cms/public/testPage2'>testPage2</a>
+				<ul>
+					<li><a href='/cms/public/testPage2/testPage2-child1'>testPage2-child1</a></li>
+					<li><a href='/cms/public/testPage2/testPage2-child2'>testPage2-child2</a></li>
+				</ul>
+			</li>
+		</ul>
+		<script src='/cms/js/MenuMatic_0.68.3-source.js'></script>
+		<script src='/cms/js/widgets/menu.js'></script>
+		<div id='bodyWrapper'>
+			<h1>page1</h1>
+		</div>
+	</div>
+</body>
+</html>

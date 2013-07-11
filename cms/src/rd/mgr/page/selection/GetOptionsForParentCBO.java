@@ -1,4 +1,4 @@
-package rd.servlet.page.selection;
+package rd.mgr.page.selection;
 
 import javax.persistence.EntityManager;
 
@@ -40,7 +40,7 @@ public class GetOptionsForParentCBO implements ISpecialSelection {
 			}
 			String name = (cur.getName().length() > 20)? cur.getName().substring(0, 17): cur.getName();
 			result.append(name).append("</option>");
-			getAvailableParents(eMgr, cur.getId(), id, cntr++, parentID, result);
+			getAvailableParents(eMgr, cur.getId(), id, cntr+1, parentID, result);
 		}
 	}
 }

@@ -3,35 +3,32 @@
 <%@page import="com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array"%>
 <%@page import="java.util.Date"%>
 <%
-	Object o = session.getAttribute("role");
-	if(o == null){
-		response.sendRedirect("login.jsp");
-	}else{
-		String[] roles = (String[])o;
-		if(Arrays.binarySearch(roles, "admin") < 0){
-			response.sendRedirect("login.jsp");
-		}
-	}
+// 	Object o = session.getAttribute("role");
+// 	if(o == null){
+// 		response.sendRedirect("login.jsp");
+// 	}else{
+// 		String[] roles = (String[])o;
+// 		if(Arrays.binarySearch(roles, "admin") < 0){
+// 			response.sendRedirect("login.jsp");
+// 		}
+// 	}
 %>
+<% String path = getServletContext().getContextPath(); %>
 <html>
 <head>
-<script
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-<script
-	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
-<script src="/cms/js/jquery.jstree/_lib/jquery.hotkeys.js"></script>
-<script src="/cms/js/jquery.jstree/_lib/jquery.cookie.js"></script>
-<script src="/cms/js/jquery.jstree/jquery.jstree.js"></script>
-<script src="/cms/js/jquery.livequery.js"></script>
-<script src="js/admin.js"></script>
-<script src="js/ckeditor/ckeditor.js"></script>
-<link rel="stylesheet" href="js/ckeditor/contents.css">
+<script	src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script	src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script src="<%=path %>/js/jquery.jstree/_lib/jquery.hotkeys.js"></script>
+<script src="<%=path %>/js/jquery.jstree/_lib/jquery.cookie.js"></script>
+<script src="<%=path %>/js/jquery.jstree/jquery.jstree.js"></script>
+<script src="<%=path %>/js/jquery.livequery.js"></script>
+<script src="<%=path %>/admin/js/admin.js"></script>
+<script src="<%=path %>/admin/js/ckeditor/ckeditor.js"></script>
 
-<link rel="stylesheet" href="css/admin.css" type="text/css" />
-<link rel="stylesheet"
-	href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/themes/south-street/jquery-ui.css"
-	type="text/css" />
-<link rel="stylesheet" href="/cms/js/jquery.jstree/themes/default/style.css"/>
+<link rel="stylesheet" href="<%=path %>/admin/js/ckeditor/contents.css">
+<link rel="stylesheet" href="<%=path %>/admin/css/admin.css" />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+<link rel="stylesheet" href="<%=path %>/js/jquery.jstree/themes/default/style.css"/>
 </head>
 <body>
 	<div id="header">

@@ -37,8 +37,8 @@ public class PageMgr implements IPageMgr {
 		}
 		
 		/* check for exactly one home page, if multiple choose one of the new ones, if none make one of the new ones homepage */
+		Page[] homes = getHomePage(eMgr);
 		if(homeIDs.size() > 0){
-			Page[] homes = getHomePage(eMgr);
 			if(homes.length == 0){
 				pages[0].setSpecial(pages[0].getSpecial()|1);
 			}else if(homes.length > 1){
@@ -52,6 +52,8 @@ public class PageMgr implements IPageMgr {
 					}
 				}
 			}
+		}else{
+			pages[0].setSpecial(pages[0].getSpecial()|1);
 		}
 		
 		return pages;

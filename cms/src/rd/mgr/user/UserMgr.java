@@ -76,4 +76,16 @@ public class UserMgr implements IUserMgr {
 		
 		return usrs;
 	}
+	
+	@Override
+	public User getUserByEmail(EntityManager eMgr, String email) {
+		User result = null;
+		TypedQuery<User> qry = eMgr.createNamedQuery("User.findByEmail", User.class);
+		qry.setParameter("email", email);
+		List<User> usrs = qry.getResultList();		
+		if(usrs.size() > 0){
+			result = usrs.get(0);
+		}
+		return result;
+	}
 }
