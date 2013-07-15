@@ -617,6 +617,7 @@ function PageMgmt($leftMenu, $hasLeftMenu) {
 			CKEDITOR.replace( 'body',
 				    {
 				        filebrowserBrowseUrl : '/cms/admin/browser/browse',
+//						filebrowserBrowseUrl : '/cms/admin/browser/browser.jsp?dir=/usr/share/tomcat7/webapps/cmsUploadFolder',
 				        filebrowserUploadUrl : '/cms/admin/uploader/upload',
 				        filebrowserWindowWidth : '320',
 				        filebrowserWindowHeight : '240'

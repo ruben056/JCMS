@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="cms" default="makeWar" basedir=".">
-	
+
 	<target name="deploy" description="build and deploy the war file">
 		<delete dir="/usr/share/tomcat7/webapps/cms"></delete>
-		<delete file="/usr/share/tomcat7/webapps/cms.war"></delete>
-		<antcall target="makeWar"></antcall>
-		<move file="/home/ruben/Documents/Java/workspace/cms/dist/cms.war" todir="/usr/share/tomcat7/webapps"></move>
+		<delete file="/usr/share/tomcat7/webapps/cms.war"></delete>		
+		<antcall target="makeWar"/>
+		<move file="/home/ruben/Documents/Java/workspace/cms/dist/cms.war" todir="/usr/share/tomcat7/webapps">
+		</move>
+		<antcall target="restartTomcat7"/>
 	</target>
-	
+
 	<target name="makeWar">
-		<mkdir dir="dist"/>
+		<mkdir dir="dist" />
 		<war destfile="dist/cms.war" needxmlfile="false">
 			<fileset dir="WebContent">
-				<include name="**/*.*"/>
+				<include name="**/*.*" />
 			</fileset>
-			<classes dir="build/classes"/>
+			<classes dir="build/classes" />
 		</war>
+	</target>
+
+	<target name="restartTomcat7">
+		<exec executable="/bin/bash">
+			<arg value="/home/ruben/myScripts/restartTomcat7.sh" />
+		</exec>
 	</target>
 
 	<!-- <target name="makeJar">
@@ -25,6 +33,5 @@
 			<metainf dir="WebContent/META-INF" includes="persistence.xml"/>
 		</jar>
 	</target> -->
-	
 
 </project>

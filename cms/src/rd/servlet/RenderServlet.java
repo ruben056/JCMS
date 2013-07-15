@@ -1,6 +1,7 @@
 package rd.servlet;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
@@ -51,39 +52,31 @@ public class RenderServlet extends HttpServlet {
 		}
 	}
 	
-	public String performAction(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+	public String performAction(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, Exception{
 		
 		Page p = getPage(eMgr, req, resp);
-		
 		// create header String
 		String metaData = getMetaData(p);
 		
 		// some templateing stuff, ... TODO... enhance
 		String template = getTemplate(eMgr, p);
 		
-		// create optional header
-			
-		String ctxPath = getServletContext().getContextPath();
-		/** SOME STUFF FOR THE MENU  TODO @rude this needs to be refactored*/
-		metaData += "<link rel='stylesheet' href='/cms/css/widgets/menu.css'/>";
-//		<!-- Include the MooTools Framework at the bottom of your file -->
-		metaData += "<script src='http://www.google.com/jsapi' ></script>";
-		metaData += "<script > google.load('mootools', '1.2.1'); </script>";
-		metaData += "<script src='/cms/js/MenuMatic_0.68.3-source.js' ></script>";
-		/** SOME STUFF FOR THE MENU */
-		
+		java.util.Vector<String> stylesAndScripts = new java.util.Vector<String>();
+		String tmpBody = ContentParser.parse(eMgr, p.getBody(), stylesAndScripts);
+		//add widget styles:
+		Iterator<String> it = stylesAndScripts.iterator();
+		while(it.hasNext()){
+			metaData += it.next();
+		}
 		// create body
 		String body = "<html><header>" + metaData +"</header><body>";
 		body += "<div id='pageWrapper'>";
 //		body += "<div id='bodyWrapper'>";
-		body += ContentParser.parse(eMgr, p.getBody());
+		body += tmpBody;
 //		body += "</div>";
 		body += "</div>";
 		body += "</body></html>" ;
-				
-		// create optional footer		
-		
-		//TODO for now just return the body
+						
 		return body;
 	}
 	

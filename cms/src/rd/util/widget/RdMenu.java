@@ -1,5 +1,7 @@
 package rd.util.widget;
 
+import java.util.Vector;
+
 import javax.persistence.EntityManager;
 
 import rd.mgr.page.Page;
@@ -7,9 +9,12 @@ import rd.util.ComponentFactory;
 import rd.util.ENUM_UTIL;
 import rd.util.StringUtil;
 
-public class RdMenu implements IWidget{
+public class RdMenu extends BaseWidget{
 	
-	public final static String REPLACE_PATTERN = "\\[\\[jCMS:rdMenu(.*?)\\]\\]";
+	private final static String REPLACE_PATTERN = "\\[\\[jCMS:rdMenu(.*?)\\]\\]";
+	
+	private final static String STYLE_HORIZONTAL = "<link rel='stylesheet' href='/cms/css/widgets/menuHorizontal.css'/>";
+	private final static String STYLE_VERTICAL= "<link rel='stylesheet' href='/cms/css/widgets/menuVertical.css'/>";
 	
 	private int direction = ENUM_UTIL.DIRECTION_HORIZONTAL; 
 	private long parent = 0; // top level
@@ -73,7 +78,7 @@ public class RdMenu implements IWidget{
 	@Override
 	public String toHTML(EntityManager eMgr) {
 		
-		StringBuffer s = new StringBuffer("<div id='menuWrapper'>");
+		StringBuilder s = new StringBuilder("<div id='menuWrapper'>");
 		s.append("<ul id='nav'>");
 		s.append(buildList(eMgr, getParent(), 0));
 		s.append("</ul>");
@@ -82,7 +87,11 @@ public class RdMenu implements IWidget{
 		//After that, (in your own javascript file) create a new class instance.
 		s.append("<script src='/cms/js/MenuMatic_0.68.3-source.js'></script>");
 		s.append("<script src='/cms/js/widgets/menu.js'></script>");
-		
+		s.append("<script>" +
+				"jQuery(document).ready(function() {" +
+				"var myMenu = new MenuMatic({ id:'nav', orientation: '" + getDirectionString() + "'  });"+
+				"});"+
+				"</script>");
 		return s.toString();
 	}
 	
@@ -114,6 +123,9 @@ public class RdMenu implements IWidget{
 		
 		for (int i = 0; i < childPages.length; i++) {
 			Page child = childPages[i];
+			if((child.getSpecial()&2) == 2) // skip hidden pages
+				continue;;
+				
 			sb.append("<li><a href='" +  child.getRelativeURL(eMgr)).append("'>").append(child.getName()).append("</a>");
 			sb.append(buildList(eMgr, child.getId(), depth+1));
 			sb.append("</li>");
@@ -121,6 +133,19 @@ public class RdMenu implements IWidget{
 		if(depth != 0)sb.append("</ul>");
 		
 		return sb.toString();
+	}
+	
+	@Override
+	public Vector<String> addStylesAndScripts(Vector<String> stylesAndScripts) {
+		if(direction == ENUM_UTIL.DIRECTION_HORIZONTAL){
+			stylesAndScripts.add(RdMenu.STYLE_HORIZONTAL);
+		}else{
+			stylesAndScripts.add(RdMenu.STYLE_VERTICAL);
+		}
+		stylesAndScripts.add("<script src='http://www.google.com/jsapi' ></script>");
+		stylesAndScripts.add("<script > google.load('mootools', '1.2.1'); </script>");
+		stylesAndScripts.add("<script src='/cms/js/MenuMatic_0.68.3-source.js' ></script>");
+		return stylesAndScripts;
 	}
 	
 	@Override

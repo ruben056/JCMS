@@ -48,17 +48,17 @@ public class StartupServlet extends HttpServlet {
 		// create some pages first
 		Page[] pages = new Page[4];
 		pages[0] = new Page("testPage1", "den titel");
-		pages[0].setBody("[[jCMS:rdMenu{'direction':'0' }]] <p> page1 </p>");
+		pages[0].setBody("[[jCMS:rdMenu{'direction':'1' }]] <p> page1 </p> [[jCMS:pageComments{'title': 'test argument titel'}]]");
 		pages[0].setParentID(0);
 		pages[0].setOrd(1);
 		
 		pages[1] = new Page("testPage2", "ook root normaal");
-		pages[1].setBody("[[jCMS:rdMenu{'direction':'0' }]] <p> Page2</p>");
+		pages[1].setBody("[[jCMS:rdMenu{'direction':'1' }]] <p> Page2</p>");
 		pages[1].setParentID(0);
 		pages[1].setOrd(2);
 		
 		pages[2] = new Page("testPage2-child1");
-		pages[2].setBody("[[jCMS:rdMenu{'direction':'0' }]] <p> child1 </p>");
+		pages[2].setBody("[[jCMS:rdMenu{'direction':'1' }]] <p> child1 </p>");
 		pages[2].setParentID(2);
 		pages[2].setOrd(1);
 		

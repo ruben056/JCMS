@@ -1,5 +1,10 @@
 package rd;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,9 +19,13 @@ import rd.mgr.user.User;
 import rd.util.ComponentFactory;
 import rd.util.GeneralUtil;
 import rd.util.ISpecialSelection;
-import rd.util.db.DBUtil;
 import rd.util.widget.RdMenu;
 import rd.util.widget.parser.ContentParser;
+import rd.util.widget.plugin.Plugin;
+import rd.util.widget.plugin.TestPlugin;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 public class TestClass {
 
@@ -26,31 +35,52 @@ public class TestClass {
 	public static void main(String[] args) {
 		
 //		testRegExp();
-		
-		EntityManager eMgr = DBUtil.getLocalEmf().createEntityManager();		
-		eMgr.getTransaction().begin();
+		testPluginParser();
+//		EntityManager eMgr = DBUtil.getLocalEmf().createEntityManager();		
+//		eMgr.getTransaction().begin();
+//		try {
+//			 /** perform some tests and some initialization here */
+////			createGroups(eMgr);
+////			createUser(eMgr);
+////			testPages(eMgr);
+////			testMenu(eMgr);
+////		
+////			testParse(eMgr);
+//			eMgr.getTransaction().commit();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			eMgr.getTransaction().rollback();
+//		} finally{
+//			eMgr.close();
+//		}
+	}
+	
+	private static void testPluginParser(){
 		try {
-			 /** perform some tests and some initialization here */
-//			createGroups(eMgr);
-//			createUser(eMgr);
-//			testPages(eMgr);
-//			testMenu(eMgr);
-//		
-			testParse(eMgr);
-			eMgr.getTransaction().commit();
-		} catch (Exception e) {
+			Gson gson = new Gson();
+			File f = new File("/home/ruben/jCMSRoot/plugins/pageComments/plugin.json");
+			String s = new String(Files.readAllBytes(Paths.get(f.toURI())));
+			Plugin p = gson.fromJson(s, Plugin.class);
+			
+			s = "{'title': 'sdfqsfd'}]]";
+			TestPlugin tp = gson.fromJson(s, TestPlugin.class);
+			System.out.println(tp.getTitle());
+			
+		} catch (JsonSyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			eMgr.getTransaction().rollback();
-		} finally{
-			eMgr.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
-	private static void testParse(EntityManager eMgr){
+	private static void testParse(EntityManager eMgr) throws Exception{
 		String toParse = "<html><head></head><body><h1>testing</h1> [[jCMS:rdMenu{'direction':'0'}]] qlmsdkfj lsdfjkqlmdsfkj [[jCMS:rdMenu{'direction':'0', 'opacity':'1'}]]</body></html>";
 		
-		String res = ContentParser.parse(eMgr, toParse);
+		Vector<String> v = new Vector<String>();
+		String res = ContentParser.parse(eMgr, toParse, v);
 		System.out.println(res);
 	}
 	

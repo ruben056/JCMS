@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import rd.util.config.RDProperties;
+
 @MultipartConfig(fileSizeThreshold=1024*1024, maxFileSize=1024*1024*5, maxRequestSize=1024*1024*5*5)
 @WebServlet(name = "FileUploadServlet", urlPatterns = {"/admin/uploader/upload"})
 public class FileUploadServlet extends HttpServlet {
@@ -37,7 +39,7 @@ public class FileUploadServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 
 	    // Create path components to save the file
-		final String path = "/usr/share/tomcat7/webapps/cmsUploadFolder"; //TODO this will have to be configurable
+		final String path = RDProperties.getString(RDProperties.CONTENT_UPLOAD_FOLDER); //TODO this will have to be configurable
 	    final Part filePart = request.getPart("upload");
 	    final String fileName = getFileName(filePart);
 

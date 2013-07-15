@@ -1,5 +1,7 @@
 package rd.util.widget;
 
+import java.util.Vector;
+
 import javax.persistence.EntityManager;
 
 public interface IWidget {
@@ -13,4 +15,12 @@ public interface IWidget {
 	 * @return
 	 */
 	public boolean isOnePerPage();
+	
+	/**
+	 * This is where  you add the widget css and javascript files to the list
+	 * 
+	 * @param stylesAndScripts
+	 * @return
+	 */
+	public Vector<String> addStylesAndScripts(Vector<String> stylesAndScripts) ;
 }

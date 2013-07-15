@@ -22,6 +22,7 @@ jQuery.fn.autoClearfix = function(cfloose) {
 
 // Usage
 jQuery(document).ready(function() {
-	var myMenu = new MenuMatic({ id:'nav' });
+	// is now done in generated code because variable arguments
+//	var myMenu = new MenuMatic({ id:'nav' }); 
 	jQuery("#menuWrapper").autoClearfix(true);
 });

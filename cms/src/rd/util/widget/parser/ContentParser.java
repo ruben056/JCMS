@@ -21,15 +21,16 @@ public class ContentParser {
 	 * @param content
 	 * @return
 	 */
-	public static String parse(EntityManager eMgr, String content) {
+	public static String parse(EntityManager eMgr, String content, java.util.Vector<String> stylesAndScripts) throws Exception {
 
 		String result = content;
 		Pattern p = Pattern.compile(ContentParser.SEARCH_PATTERN);
 		Matcher m = p.matcher(content);
 		if(m.find()){
 			IWidget w = WidgetFactory.createWidget(eMgr, m.group(1));
+			w.addStylesAndScripts(stylesAndScripts);
 			String tmp = content.replaceFirst(w.getReplacePattern(), w.toHTML(eMgr));
-			result = ContentParser.parse(eMgr, tmp);
+			result = ContentParser.parse(eMgr, tmp, stylesAndScripts);
 		}
 		return result; 
 	}
