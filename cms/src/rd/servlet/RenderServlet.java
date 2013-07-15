@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import rd.mgr.page.Menu;
 import rd.mgr.page.Page;
 import rd.util.ComponentFactory;
 import rd.util.StringUtil;
 import rd.util.db.DBUtil;
+import rd.util.widget.parser.ContentParser;
 
 /**
  * This servlets retrieves a page, and renders the output.
@@ -53,8 +53,6 @@ public class RenderServlet extends HttpServlet {
 	
 	public String performAction(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		
-		
-		
 		Page p = getPage(eMgr, req, resp);
 		
 		// create header String
@@ -66,7 +64,7 @@ public class RenderServlet extends HttpServlet {
 		// create optional header
 			
 		String ctxPath = getServletContext().getContextPath();
-		/** SOME STUFF FOR THE MENU */
+		/** SOME STUFF FOR THE MENU  TODO @rude this needs to be refactored*/
 		metaData += "<link rel='stylesheet' href='/cms/css/widgets/menu.css'/>";
 //		<!-- Include the MooTools Framework at the bottom of your file -->
 		metaData += "<script src='http://www.google.com/jsapi' ></script>";
@@ -74,14 +72,12 @@ public class RenderServlet extends HttpServlet {
 		metaData += "<script src='/cms/js/MenuMatic_0.68.3-source.js' ></script>";
 		/** SOME STUFF FOR THE MENU */
 		
-		
 		// create body
 		String body = "<html><header>" + metaData +"</header><body>";
 		body += "<div id='pageWrapper'>";
-//		body += "<div id='menuWrapper'>"; 
-		body += getMenu(eMgr);
-//		body += "</div>"
-		body += "<div id='bodyWrapper'>"+p.getBody()+"</div>";
+//		body += "<div id='bodyWrapper'>";
+		body += ContentParser.parse(eMgr, p.getBody());
+//		body += "</div>";
 		body += "</div>";
 		body += "</body></html>" ;
 				
@@ -89,12 +85,6 @@ public class RenderServlet extends HttpServlet {
 		
 		//TODO for now just return the body
 		return body;
-	}
-	
-	private String getMenu(EntityManager eMgr){
-		//TODO
-		Menu mnu = new Menu();
-		return mnu.toHTML(eMgr);
 	}
 	
 	private String getTemplate(EntityManager eMgr, Page p){

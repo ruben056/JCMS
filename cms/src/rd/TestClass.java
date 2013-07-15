@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
 
 import rd.mgr.page.IPageMgr;
-import rd.mgr.page.Menu;
 import rd.mgr.page.Page;
 import rd.mgr.page.selection.GetPageHierarchy;
 import rd.mgr.user.Group;
@@ -16,6 +15,8 @@ import rd.util.ComponentFactory;
 import rd.util.GeneralUtil;
 import rd.util.ISpecialSelection;
 import rd.util.db.DBUtil;
+import rd.util.widget.RdMenu;
+import rd.util.widget.parser.ContentParser;
 
 public class TestClass {
 
@@ -24,25 +25,33 @@ public class TestClass {
 	 */
 	public static void main(String[] args) {
 		
-		testRegExp();
+//		testRegExp();
 		
-//		EntityManager eMgr = DBUtil.getLocalEmf().createEntityManager();		
-//		eMgr.getTransaction().begin();
-//		try {
-//			 /** perform some tests and some initialization here */
+		EntityManager eMgr = DBUtil.getLocalEmf().createEntityManager();		
+		eMgr.getTransaction().begin();
+		try {
+			 /** perform some tests and some initialization here */
 //			createGroups(eMgr);
 //			createUser(eMgr);
 //			testPages(eMgr);
 //			testMenu(eMgr);
-//			
-//			eMgr.getTransaction().commit();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			eMgr.getTransaction().rollback();
-//		} finally{
-//			eMgr.close();
-//		}
+//		
+			testParse(eMgr);
+			eMgr.getTransaction().commit();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			eMgr.getTransaction().rollback();
+		} finally{
+			eMgr.close();
+		}
+	}
+	
+	private static void testParse(EntityManager eMgr){
+		String toParse = "<html><head></head><body><h1>testing</h1> [[jCMS:rdMenu{'direction':'0'}]] qlmsdkfj lsdfjkqlmdsfkj [[jCMS:rdMenu{'direction':'0', 'opacity':'1'}]]</body></html>";
+		
+		String res = ContentParser.parse(eMgr, toParse);
+		System.out.println(res);
 	}
 	
 	private static void testRegExp(){
@@ -55,13 +64,14 @@ public class TestClass {
 		int cnt = m.groupCount();
 		System.out.println("groups=" + cnt);
 		while(m.find()){
-			System.out.println("match = " + m.group(1));
+			String grp = m.group(1);
+			System.out.println("match = " + grp);
 		}
 		
 	}
 	
 	private static void testMenu(EntityManager eMgr){
-		Menu mnu = new Menu();
+		RdMenu mnu = new RdMenu();
 		String s = mnu.toHTML(eMgr);
 		
 		System.out.println("result:\n" + s);;

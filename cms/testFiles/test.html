@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 
 <html>
 <header>
@@ -17,21 +16,19 @@
 </header>
 <body>
 	<div id='pageWrapper'>
-		<ul id='nav'>
-			<li><a href='/cms/public/testPage1'>testPage1</a></li>
-			<li>
-			<a href='/cms/public/testPage2'>testPage2</a>
+		<div id='menuWrapper'>
+			<ul id='nav'>
+				<li><a href='/cms/public/testPage1'>testPage1</a></li>
+				<li><a href='/cms/public/testPage2'>testPage2</a>
 				<ul>
-					<li><a href='/cms/public/testPage2/testPage2-child1'>testPage2-child1</a></li>
-					<li><a href='/cms/public/testPage2/testPage2-child2'>testPage2-child2</a></li>
-				</ul>
-			</li>
-		</ul>
+						<li><a href='/cms/public/testPage2/testPage2-child1'>testPage2-child1</a></li>
+						<li><a href='/cms/public/testPage2/testPage2-child2'>testPage2-child2</a></li>
+					</ul></li>
+			</ul>
+		</div>
 		<script src='/cms/js/MenuMatic_0.68.3-source.js'></script>
 		<script src='/cms/js/widgets/menu.js'></script>
-		<div id='bodyWrapper'>
-			<h1>page1</h1>
-		</div>
+		<h1>page1</h1>
 	</div>
 </body>
 </html>

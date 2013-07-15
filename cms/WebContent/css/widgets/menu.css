@@ -6,11 +6,11 @@
 /* ----[ LINKS ]----*/
 
 #menuWrapper {
-	display:block;
+/* 	display:block; */
 	padding:0;
 	width:100%;
 	background:#fff;
-	margin:-100px 0 0 0;
+/* 	margin:-100px 0 0 0; */
 	border:solid #E69623;
 	border-width:3px 0 3px 0;
 	opacity: 0.90;

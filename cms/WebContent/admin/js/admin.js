@@ -743,7 +743,7 @@ function PageMgmt($leftMenu, $hasLeftMenu) {
 						$id.val(pageData.id);
 						$name.val(pageData.name);
 						$title.val(pageData.title);
-						$pageLink.attr("href", "/cms/index.jsp?id="+pageData.id);
+						$pageLink.attr("href", "/cms/public?id="+pageData.id);
 						$pageLink.show();
 						$aDate.val(pageData.associatedDate);
 						that.fillParentPagesList(pageID);

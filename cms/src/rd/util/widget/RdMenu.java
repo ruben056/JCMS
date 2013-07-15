@@ -1,13 +1,15 @@
-package rd.mgr.page;
+package rd.util.widget;
 
 import javax.persistence.EntityManager;
 
+import rd.mgr.page.Page;
 import rd.util.ComponentFactory;
 import rd.util.ENUM_UTIL;
+import rd.util.StringUtil;
 
-public class Menu {
+public class RdMenu implements IWidget{
 	
-	private static int menuIDs = 0;
+	public final static String REPLACE_PATTERN = "\\[\\[jCMS:rdMenu(.*?)\\]\\]";
 	
 	private int direction = ENUM_UTIL.DIRECTION_HORIZONTAL; 
 	private long parent = 0; // top level
@@ -15,7 +17,7 @@ public class Menu {
 	private int columns = 1; // dropdown submenus
 	private int opacity = 1; // opacity of the submenus
 	
-	public Menu(){
+	public RdMenu(){
 		
 	}
 
@@ -67,18 +69,16 @@ public class Menu {
 			return "vertical";
 		}
 	}
-	public String toHTML(EntityManager eMgr){
+	
+	@Override
+	public String toHTML(EntityManager eMgr) {
 		
-//		int menuID = Menu.menuIDs++;
-//		StringBuffer s = new StringBuffer("<div class='menu-fg menu-fg-").append(getDirectionString());
-//		s.append("' id='menu-fg-").append(menuID).append("'>");
-		StringBuffer s = new StringBuffer();
-//		s.append("<div id='").append("container").append("'>");
+		StringBuffer s = new StringBuffer("<div id='menuWrapper'>");
 		s.append("<ul id='nav'>");
 		s.append(buildList(eMgr, getParent(), 0));
 		s.append("</ul>");
-//		s.append("</div>");
-		
+		s.append("</div>");
+
 		//After that, (in your own javascript file) create a new class instance.
 		s.append("<script src='/cms/js/MenuMatic_0.68.3-source.js'></script>");
 		s.append("<script src='/cms/js/widgets/menu.js'></script>");
@@ -99,16 +99,16 @@ public class Menu {
 		
 		if(depth != 0){
 			sb.append("<ul");
-//			StringBuffer style = new StringBuffer(); 
-//			if(!StringUtil.isNull(getBackGround())){
-//				style.append("background: ").append(getBackGround()).append(";");
-//			}
-//			if(getOpacity() != 1){
-//				style.append("opacity: ").append(getOpacity()).append(";");
-//			}
-//			if(style.length() > 0){
-//				sb.append(" style=").append(style.toString());
-//			}
+			StringBuffer style = new StringBuffer(); 
+			if(!StringUtil.isNull(getBackGround())){
+				style.append("background: ").append(getBackGround()).append(";");
+			}
+			if(getOpacity() != 1){
+				style.append("opacity: ").append(getOpacity()).append(";");
+			}
+			if(style.length() > 0){
+				sb.append(" style=").append(style.toString());
+			}
 			sb.append(">");
 		}
 		
@@ -121,5 +121,15 @@ public class Menu {
 		if(depth != 0)sb.append("</ul>");
 		
 		return sb.toString();
+	}
+	
+	@Override
+	public String getReplacePattern() {
+		return RdMenu.REPLACE_PATTERN;
+	}
+
+	@Override
+	public boolean isOnePerPage() {
+		return true;
 	}
 }
