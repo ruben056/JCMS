@@ -2,8 +2,6 @@ package rd.util.widget.plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -24,6 +22,7 @@ public class PluginFactory {
 
 	private static HashMap<String, Plugin> pluginsPerWidget = new HashMap<String, Plugin>();
 	private static HashMap<String, Vector<Plugin>> pluginsPerTrigger = new HashMap<String, Vector<Plugin>>();
+	private static Vector<Plugin> allPlugins= new  Vector<Plugin>();
 
 //	private static Vector<Plugin> plugins = new Vector<Plugin>();
 	static {
@@ -40,12 +39,16 @@ public class PluginFactory {
 						File pluginFile = new File(cur.getAbsolutePath()+"/plugin.json");
 						if(pluginFile.exists()){
 							try {
-								String s = new String(Files.readAllBytes(Paths.get(pluginFile.toURI())));
-								Plugin p = gson.fromJson(s, Plugin.class);
+								String fileContent = GeneralUtil.readFile(pluginFile);
+								Plugin p = gson.fromJson(fileContent, Plugin.class);
+								allPlugins.add(p);
+								
+								// not all plugins are widgets i guess, need to add way to differentiate here ...
 								pluginsPerWidget.put(p.getName(), p);
+								
 								TriggerConfig[] triggers = p.getTriggers();
 								for (int j = 0; j < triggers.length; j++) {
-									String key = triggers[i].key();
+									String key = triggers[j].key();
 									Vector<Plugin> v = pluginsPerTrigger.get(key);
 									if(v==null){
 										v = new Vector<Plugin>();
@@ -57,6 +60,8 @@ public class PluginFactory {
 								System.out.println("The plugin file is not in the correct json format : " + pluginFile.getAbsolutePath());
 							} catch (IOException e) {
 								System.out.println("The plugin file cannot be read, make sure it is present : " + pluginFile.getAbsolutePath());
+							} finally{
+								System.out.println("plugins loaded");
 							}
 						}
 					}
@@ -75,5 +80,9 @@ public class PluginFactory {
 
 	public static Vector<Plugin> getPluginForTrigger(String trigger) {
 		return PluginFactory.pluginsPerTrigger.get(trigger);
+	}
+	
+	public static Plugin[] getAllPlugins(){
+		return allPlugins.toArray(new Plugin[allPlugins.size()]);
 	}
 }

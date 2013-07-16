@@ -1,9 +1,12 @@
 package rd.util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,6 +23,10 @@ import com.google.gson.JsonSerializer;
 
 public class GeneralUtil {
 
+	public static String readFile(File f) throws IOException{
+		return new String(Files.readAllBytes(Paths.get(f.toURI())));
+	}
+	
 	public static String getStringFromInputStream(InputStream is) {
 		 
 		BufferedReader br = null;
@@ -44,7 +51,6 @@ public class GeneralUtil {
 				}
 			}
 		}
- 
 		return sb.toString();
 	}
 	
@@ -57,7 +63,7 @@ public class GeneralUtil {
 	 */
 	private static Gson gson = null;
 	public static Gson getGSON() {
-		GsonBuilder gsonBuilder = new GsonBuilder();
+		GsonBuilder gsonBuilder = new GsonBuilder();			
 		gsonBuilder.registerTypeAdapter(Date.class,
 				new JsonDeserializer<Date>() {
 					DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -91,8 +97,6 @@ public class GeneralUtil {
 						return null;
 					}
 				});
-		gson = gsonBuilder.create();
-
-		return gson;
+		return gsonBuilder.create();
 	}
 }

@@ -253,6 +253,29 @@ WSUtil.saveUser = function(usr, doneFunction) {
 	});
 };
 
+WSUtil.getPlugins = function(doneFunction, errFunction) {
+	$.ajax(	{
+		url:"/cms/admin/plugins/controller",
+		type: "POST",
+		data: {"action":"GetPlugins"}
+	}).done(function(data) {
+		WSUtil.processResponse(data, doneFunction);
+	}).fail(function(e){
+		errFunction(e);
+	});
+};
+
+WSUtil.disablePlugin = function(doneFunction, name){		
+	$.ajax(	{
+		url:"/cms/admin/plugins/controller",
+		type: "POST",
+		data: {"action":"disablePlugin", "name":name}
+	}).done(function(data) {
+		WSUtil.processResponse(data, doneFunction);
+	}).fail(function(e){
+		errFunction(e);
+	});
+};
 
 /**
  * Initialization of some global variables
@@ -260,6 +283,7 @@ WSUtil.saveUser = function(usr, doneFunction) {
 var wsUtil = new WSUtil();
 var pageMgmt;
 var userMgmt;
+var pluginMgmt;
 
 /**
  * ------------------------------------------------------------------------------------------------
@@ -319,6 +343,28 @@ $(function() {
 		return false;
 	});
 	
+	var $pluginLink = $('div#menu-top li a[href="plugins.jsp"]');
+	$pluginLink.click(function(e){
+		$wrapper.empty();
+		$('div#jstree-marker').remove();
+		$('div#jstree-marker-line').remove();
+//		$('div#vakata-contextmenu').remove();
+		$('div#ui-datepicker-div').remove();
+				
+		var $leftMenu = $('<div class="left-menu">');
+		var $hasLeftMenu = $('<div class="has-left-menu">');
+		
+		$wrapper.append($('<h1>Pugins</h1>'));
+		$wrapper.append($leftMenu);
+		$wrapper.append($hasLeftMenu);
+		
+		pluginMgmt = new PluginMgmt($leftMenu, $hasLeftMenu);
+		pluginMgmt.initPlugins($leftMenu, $hasLeftMenu);
+		
+		e.preventDefault();
+		return false;
+	});
+	
 	var $logoutLink = $('div#menu-top li a[href="logout.jsp"]');
 	$logoutLink.click(function(e){
 		
@@ -343,6 +389,71 @@ $(function() {
 
 /**
  * ------------------------------------------------------------------------------------------------
+ * ALL FUNCTIONS FOR PLUGIN MANAGEMENT
+ * ------------------------------------------------------------------------------------------------
+ */
+function PluginMgmt($leftMenu, $hasLeftMenu){
+	"use strict";
+	var $left = $leftMenu;
+	var $right = $hasLeftMenu;
+	
+	this.initPlugins = function (){
+		"use strict";
+		var that = this;
+		var $a = $('<a href="#">Plugins</a>');
+		$left.append($a);
+		$a.click(function(e){
+			$right.empty();
+			that.buildPluginList();
+			
+			e.preventDefault();
+			return false;
+		});
+		that.buildPluginList();
+	};
+	
+	this.buildPluginList = function(){
+		//TODO retrieve the plugins and show them in a table somilar to the users
+		// allow to enable disable them that is about it...
+		WSUtil.getPlugins(function(data){
+			$hasLeftMenu.append($('<h2>Plugin Management</h2>'));
+			var $table = $('<table>');
+			$right.append($table);		
+			var $row1 = $('<tr><th>Plugin name</th><th>Description</th><th>Active</th></tr>');
+			$table.append($row1);
+			var plugins = data.obj;
+			for(var i =0; i < plugins.length; i++){
+				var plugin = plugins[i];
+				var name = plugin["name"];
+				var descr = plugin["description"];
+				var active = plugin["enabled"];
+				var msg = '<tr>';
+				msg += '<td>' + name + '</td>';
+				msg += '<td>' + descr + '</td>';				
+				msg += '<td><a href="#" args='+ name +'>' + ((active)?"disable":"enable") + '</a></td>'; // when clicking 				
+				msg +=	'</tr>';
+	 
+				var $r = $(msg);
+				$table.append($r);
+			}
+			
+			$table.find("a").click(function(e){
+				var name = $(this).attr("args");
+				//TODO
+				WSUtil.disablePlugin(name);
+				
+				e.preventDefault();
+				return false;
+			});
+			
+		}, function(e){
+			alert(e);
+		});
+	};
+}
+
+/**
+ * ------------------------------------------------------------------------------------------------
  * ALL FUNCTIONS FOR USER MANAGEMENT
  * ------------------------------------------------------------------------------------------------
  */
@@ -355,7 +466,7 @@ function UserMgmt($leftMenu, $hasLeftMenu){
 	this.initUsers = function (){
 		"use strict";
 		var that = this;
-		var $a = $('<a href="">Users</a>');
+		var $a = $('<a href="#">Users</a>');
 		$left.append($a);
 		$a.click(function(e){
 			$right.empty();
@@ -369,7 +480,7 @@ function UserMgmt($leftMenu, $hasLeftMenu){
 	
 	this.buildUserList = function (){
 		"use strict";
-		var that = this;
+		var that = this;		
 		WSUtil.getUsersForList(function(data) {
 			$hasLeftMenu.append($('<h2>User Management</h2>'));
 			var $table = $('<table>');
@@ -535,7 +646,7 @@ function UserMgmt($leftMenu, $hasLeftMenu){
 						});
 						var email = $(this).find("input#email").val();
 						var pass = $(this).find("input#password").val();
-						var pass2 = $(this).find("input#password2").val();
+//						var pass2 = $(this).find("input#password2").val();
 						
 						//TODO compare pass1 en pass2 and show message if not similar!!
 						
@@ -992,5 +1103,9 @@ function PageMgmt($leftMenu, $hasLeftMenu) {
 			}
 		});
 		return false;
+	};
+	
+	this.getCurrentPageId = function(){
+		return currentpageid;
 	};
 }

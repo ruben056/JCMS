@@ -9,11 +9,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import rd.servlet.ActionServlet;
 import rd.servlet.JSonResult;
 import rd.util.GeneralUtil;
 
-@WebServlet(name="ViewController", urlPatterns={"/admin/views"})
+@WebServlet(name="ViewController", urlPatterns={"/admin/views", "/views"})
 public class ViewController extends ActionServlet {
 
 	 /**
@@ -38,7 +40,7 @@ public class ViewController extends ActionServlet {
 		JSonResult result = new JSonResult();
 		String view = req.getParameter("name");
 		InputStream is = getServletContext().getResourceAsStream(view); //admin/views/userForm.xml
-		result.setObj(GeneralUtil.getStringFromInputStream(is));
+		result.setObj(StringEscapeUtils.unescapeHtml4(GeneralUtil.getStringFromInputStream(is)));
 		
 		return result;
 	}

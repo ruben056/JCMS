@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import rd.mgr.page.IPageMgr;
 import rd.mgr.page.Page;
 import rd.mgr.page.selection.GetPageHierarchy;
+import rd.mgr.pagecomment.IPageCommentMgr;
+import rd.mgr.pagecomment.PageComment;
 import rd.mgr.user.Group;
 import rd.mgr.user.IUserMgr;
 import rd.mgr.user.User;
@@ -48,17 +50,18 @@ public class StartupServlet extends HttpServlet {
 		// create some pages first
 		Page[] pages = new Page[4];
 		pages[0] = new Page("testPage1", "den titel");
-		pages[0].setBody("[[jCMS:rdMenu{'direction':'1' }]] <p> page1 </p> [[jCMS:pageComments{'title': 'test argument titel'}]]");
+//		pages[0].setBody("[[jCMS:rdMenu{'direction':'0' }]] <p> page1 </p> [[jCMS:testPlugin{'title': 'test argument titel'}]]");
+		pages[0].setBody("[[jCMS:rdMenu{'direction':'0' }]] <p> page1 </p> [[jCMS:pageComments{}]]");
 		pages[0].setParentID(0);
 		pages[0].setOrd(1);
 		
 		pages[1] = new Page("testPage2", "ook root normaal");
-		pages[1].setBody("[[jCMS:rdMenu{'direction':'1' }]] <p> Page2</p>");
+		pages[1].setBody("[[jCMS:rdMenu{'direction':'0' }]] <p> Page2</p>");
 		pages[1].setParentID(0);
 		pages[1].setOrd(2);
 		
 		pages[2] = new Page("testPage2-child1");
-		pages[2].setBody("[[jCMS:rdMenu{'direction':'1' }]] <p> child1 </p>");
+		pages[2].setBody("[[jCMS:rdMenu{'direction':'0' }]] <p> child1 </p>");
 		pages[2].setParentID(2);
 		pages[2].setOrd(1);
 		
@@ -78,7 +81,17 @@ public class StartupServlet extends HttpServlet {
 		}else{
 			System.out.println("result = " + GeneralUtil.getGSON().toJson(o));
 		}
+
+		PageComment[] pcs = new PageComment[3];
+		pcs[0] = new PageComment("1.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite.be", pages[0]);		
+		pcs[1] = new PageComment("2.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite2.be", pages[1]);
+		pcs[2] = new PageComment("3.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite.be", pages[0]);
+		pcs = getPageCommentMgr().savePageComments(eMgr, pcs);
+		GeneralUtil.logObject(pcs);
 		
+		pcs = getPageCommentMgr().getPageCommentsForPage(eMgr, pages[0]);
+		System.out.println("pcs for first page : ");
+		GeneralUtil.logObject(pcs);
 	}
 	
 	private void createGroups(EntityManager eMgr){
@@ -135,5 +148,9 @@ public class StartupServlet extends HttpServlet {
 	
 	private IPageMgr getPageMgr(){
 		return ComponentFactory.getPageMgr();
+	}
+	
+	private static IPageCommentMgr  getPageCommentMgr(){
+		return ComponentFactory.getPageCommentMgr();
 	}
 }

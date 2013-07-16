@@ -36,6 +36,7 @@
 			<ul>
 				<li><a href="pages.jsp">Pages</a></li>
 				<li><a href="users.jsp">Users</a></li>
+				<li><a href="plugins.jsp">Plugins</a></li>
 				<li><a href="logout.jsp"> Log Out</a></li>
 			</ul>
 		</div>

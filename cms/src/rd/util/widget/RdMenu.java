@@ -84,9 +84,7 @@ public class RdMenu extends BaseWidget{
 		s.append("</ul>");
 		s.append("</div>");
 
-		//After that, (in your own javascript file) create a new class instance.
-		s.append("<script src='/cms/js/MenuMatic_0.68.3-source.js'></script>");
-		s.append("<script src='/cms/js/widgets/menu.js'></script>");
+		//After that, (in your own javascript file) create a new class instance.	
 		s.append("<script>" +
 				"jQuery(document).ready(function() {" +
 				"var myMenu = new MenuMatic({ id:'nav', orientation: '" + getDirectionString() + "'  });"+
@@ -143,8 +141,10 @@ public class RdMenu extends BaseWidget{
 			stylesAndScripts.add(RdMenu.STYLE_VERTICAL);
 		}
 		stylesAndScripts.add("<script src='http://www.google.com/jsapi' ></script>");
-		stylesAndScripts.add("<script > google.load('mootools', '1.2.1'); </script>");
-		stylesAndScripts.add("<script src='/cms/js/MenuMatic_0.68.3-source.js' ></script>");
+//		stylesAndScripts.add("<script > google.load('mootools', '1.2.1'); </script>");
+		stylesAndScripts.add("<script src=''//ajax.googleapis.com/ajax/libs/mootools/1.4.5/mootools-yui-compressed.js'></script>");
+		stylesAndScripts.add("<script src='/cms/js/MenuMatic_0.68.3-source.js'></script>");
+		stylesAndScripts.add("<script src='/cms/js/widgets/menu.js'></script>");
 		return stylesAndScripts;
 	}
 	

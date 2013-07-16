@@ -13,12 +13,15 @@ import javax.persistence.EntityManager;
 import rd.mgr.page.IPageMgr;
 import rd.mgr.page.Page;
 import rd.mgr.page.selection.GetPageHierarchy;
+import rd.mgr.pagecomment.IPageCommentMgr;
+import rd.mgr.pagecomment.PageComment;
 import rd.mgr.user.Group;
 import rd.mgr.user.IUserMgr;
 import rd.mgr.user.User;
 import rd.util.ComponentFactory;
 import rd.util.GeneralUtil;
 import rd.util.ISpecialSelection;
+import rd.util.db.DBUtil;
 import rd.util.widget.RdMenu;
 import rd.util.widget.parser.ContentParser;
 import rd.util.widget.plugin.Plugin;
@@ -33,9 +36,10 @@ public class TestClass {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
+	
+		testJsonParse();
 //		testRegExp();
-		testPluginParser();
+//		testPluginParser();
 //		EntityManager eMgr = DBUtil.getLocalEmf().createEntityManager();		
 //		eMgr.getTransaction().begin();
 //		try {
@@ -44,8 +48,8 @@ public class TestClass {
 ////			createUser(eMgr);
 ////			testPages(eMgr);
 ////			testMenu(eMgr);
-////		
 ////			testParse(eMgr);
+//			
 //			eMgr.getTransaction().commit();
 //		} catch (Exception e) {
 //			// TODO Auto-generated catch block
@@ -54,6 +58,15 @@ public class TestClass {
 //		} finally{
 //			eMgr.close();
 //		}
+	}
+	
+	private static void testJsonParse(){
+		Gson gson = GeneralUtil.getGSON();
+//		gson.fromJson("{'id':'0','authorName':'dd','authorEmail':'demuy@htmail.com','authorWebsite':'d','page':{'id':'1'},'status':'','cDate':''}", PageComment.class);
+//		gson.fromJson("{'id':'0','authorName':'dd','authorEmail':'demuy@htmail.com','authorWebsite':'d', 'cDate':''}", PageComment.class);
+		gson.fromJson("{'id':'0','authorName':'dd','authorEmail':'demuy@htmail.com','authorWebsite':'d','page':{'id':'1'},'status':'0','cDate':''}", PageComment.class);
+		
+		
 	}
 	
 	private static void testPluginParser(){
@@ -143,6 +156,17 @@ public class TestClass {
 			System.out.println("result = " + GeneralUtil.getGSON().toJson(o));
 		}
 		
+		// add commment to page
+		PageComment[] pcs = new PageComment[3];
+		pcs[0] = new PageComment("1.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite.be", pages[0]);		
+		pcs[1] = new PageComment("2.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite2.be", pages[1]);
+		pcs[2] = new PageComment("3.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite.be", pages[0]);
+		pcs = getPageCommentMgr().savePageComments(eMgr, pcs);
+		GeneralUtil.logObject(pcs);
+		
+		pcs = getPageCommentMgr().getPageCommentsForPage(eMgr, pages[0]);
+		System.out.println("pcs for first page : ");
+		GeneralUtil.logObject(pcs);
 	}
 	
 	private static void createGroups(EntityManager eMgr){
@@ -202,6 +226,8 @@ public class TestClass {
 		return ComponentFactory.getPageMgr();
 	}
 	
-	
+	private static IPageCommentMgr  getPageCommentMgr(){
+		return ComponentFactory.getPageCommentMgr();
+	}
 
 }

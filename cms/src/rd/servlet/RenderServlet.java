@@ -70,7 +70,7 @@ public class RenderServlet extends HttpServlet {
 		}
 		// create body
 		String body = "<html><header>" + metaData +"</header><body>";
-		body += "<div id='pageWrapper'>";
+		body += "<div id='pageWrapper' pageID='"+ p.getId() +"'>";
 //		body += "<div id='bodyWrapper'>";
 		body += tmpBody;
 //		body += "</div>";

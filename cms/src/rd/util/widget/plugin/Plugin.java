@@ -9,7 +9,16 @@ public class Plugin {
 	private AdminConfig admin;
 	private TriggerConfig[] triggers;
 	private String widgetClass;
+	private boolean enabled = true; // by default plugins are enabled
 	
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
 	public Plugin(){}
 	
 	public String getName() {

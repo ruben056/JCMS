@@ -33,7 +33,8 @@ public class WidgetFactory {
 			Plugin p = PluginFactory.getPluginForWidget(name);
 			
 			if(p == null){
-				throw new ServletException("No widget with the name : " + name +" exsists!!");
+				System.out.println("No widget with the name : " + name +" exists!!");
+				throw new ServletException("No widget with the name : " + name +" exists!!");
 			}
 			result = (IWidget)GeneralUtil.getGSON().fromJson(StringEscapeUtils.unescapeHtml4(atts), 
 					Class.forName(p.getWidgetClass()));

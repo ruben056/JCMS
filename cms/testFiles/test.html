@@ -7,12 +7,14 @@
 	<link rel='stylesheet'
 		href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' />
 	<link rel='stylesheet' href='/cms/css/main.css' />
-	<link rel='stylesheet' href='/cms/css/widgets/menuVertical.css' />
+	<link rel='stylesheet' href='/cms/css/widgets/menuHorizontal.css' />
 	<script src='http://www.google.com/jsapi'></script>
 	<script>
 		google.load('mootools', '1.2.1');
 	</script>
 	<script src='/cms/js/MenuMatic_0.68.3-source.js'></script>
+	<link rel='stylesheet' href='/cms/css/widgets/pageComments.css' />
+	<script src='/cms/js/widgets/pageComments.js'></script>
 </header>
 <body>
 	<div id='pageWrapper'>
@@ -32,15 +34,11 @@
 			jQuery(document).ready(function() {
 				var myMenu = new MenuMatic({
 					id : 'nav',
-					orientation : 'vertical'
+					orientation : 'horizontal'
 				});
 			});
 		</script>
 		<p>page1</p>
-		<div>
-			title: test argument titel
-			<p>qs fdmqskfdj qmsldf comments stuff comment stuff</p>
-		</div>
 	</div>
 </body>
 </html>

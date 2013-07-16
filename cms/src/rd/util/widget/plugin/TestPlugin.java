@@ -6,7 +6,7 @@ import rd.util.widget.BaseWidget;
 
 public class TestPlugin extends BaseWidget {
 
-	public final static String REPLACE_PATTERN = "\\[\\[jCMS:pageComments(.*?)\\]\\]";
+	public final static String REPLACE_PATTERN = "\\[\\[jCMS:testPlugin(.*?)\\]\\]";
 	
 	private String title;
 	

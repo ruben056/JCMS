@@ -3,6 +3,7 @@ package rd.util;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import rd.mgr.page.IPageMgr;
+import rd.mgr.pagecomment.IPageCommentMgr;
 import rd.mgr.user.IUserMgr;
 
 
@@ -25,5 +26,13 @@ public class ComponentFactory {
 			pageMgr = (IPageMgr)ctx.getBean("PageMgr");
 		}
 		return pageMgr;
+	}
+	
+	private static IPageCommentMgr pageCommentMgr = null;
+	public static IPageCommentMgr getPageCommentMgr(){
+		if(pageCommentMgr == null){
+			pageCommentMgr = (IPageCommentMgr)ctx.getBean("PageCommentMgr");
+		}
+		return pageCommentMgr;
 	}
 }
