@@ -51,7 +51,7 @@ public class StartupServlet extends HttpServlet {
 		Page[] pages = new Page[4];
 		pages[0] = new Page("testPage1", "den titel");
 //		pages[0].setBody("[[jCMS:rdMenu{'direction':'0' }]] <p> page1 </p> [[jCMS:testPlugin{'title': 'test argument titel'}]]");
-		pages[0].setBody("[[jCMS:rdMenu{'direction':'0' }]] <p> page1 </p> [[jCMS:pageComments{}]]");
+		pages[0].setBody(StartupServlet.getBody());
 		pages[0].setParentID(0);
 		pages[0].setOrd(1);
 		
@@ -83,7 +83,7 @@ public class StartupServlet extends HttpServlet {
 		}
 
 		PageComment[] pcs = new PageComment[3];
-		pcs[0] = new PageComment("1.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite.be", pages[0]);		
+		pcs[0] = new PageComment("1.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite.be", pages[0]);
 		pcs[1] = new PageComment("2.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite2.be", pages[1]);
 		pcs[2] = new PageComment("3.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite.be", pages[0]);
 		pcs = getPageCommentMgr().savePageComments(eMgr, pcs);
@@ -152,5 +152,9 @@ public class StartupServlet extends HttpServlet {
 	
 	private static IPageCommentMgr  getPageCommentMgr(){
 		return ComponentFactory.getPageCommentMgr();
+	}
+	
+	private static String getBody(){
+		return "<p>[[jCMS:rdMenu{&#39;direction&#39;:&#39;0&#39; }]]</p>\n\n<p><a href=\"#anker\">#anker</a></p>\n\n<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:500px\">\n\t<tbody>\n\t\t<tr>\n\t\t\t<td>msqdf</td>\n\t\t\t<td>fff</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>f</td>\n\t\t\t<td>lmj</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>l</td>\n\t\t\t<td>mmm</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>sdfsdf</td>\n\t\t\t<td>ffff</td>\n\t\t</tr>\n\t</tbody>\n</table>\n\n<p>qsdfqsdfqsdfqsdfsdf<img alt=\"\" src=\"/cmsUploadFolder/free-computer-wallpapers2-1.jpg\" style=\"float:left; height:188px; margin:5px; opacity:0.9; width:250px\" /></p>\n\n<p>sqfdqdf</p>\n\n<div>\n<p>&micro;&micro;&micro;<img alt=\"\" src=\"/cmsUploadFolder/cubes.jpg\" style=\"float:right; height:113px; margin:20px; width:200px\" /></p>\n\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n\n<div>\n<p>&nbsp;</p>\n\n<div>\n<p>anker testje&nbsp;<a id=\"anker\" name=\"anker\"></a></p>\n\n<div lang=\"javascript\" style=\"background:#eee;border:1px solid #ccc;padding:5px 10px;\" title=\"adv titel\">\n<p>nen div met wa informatie</p>\n\n<p>funtion(){</p>\n\n<p>&nbsp;sqldmkfj &nbsp;mslkdf msqkdf qsmkjf</p>\n\n<p>}</p>\n</div>\n\n<p>[[jCMS:pageComments{}]]</p>\n</div>\n\n<p>&nbsp;</p>\n</div>\n</div>\n";
 	}
 }

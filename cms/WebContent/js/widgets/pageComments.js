@@ -40,7 +40,11 @@ function refreshComments(){
 				for ( var int = 0; int < comments.length; int++) {
 					var comment = comments[int];
 					var text = comment["text"]; 
-					var msg = "<div class='comment'> " + text + "</div>";
+					var author = comment["authorName"]; 
+					var website = comment["authorWebsite"]; 
+					var msg = "<div class='comment'> <p>" + author  + 
+						"(<a href='http://"+website+"'>" + website +"</a>) said:" + "</p>" +
+						"<p>"+ text + "</p></div>";
 					$content.append(jQuery(msg));
 				}
 				jQuery("div#pageWrapper").append($htmlForm);
@@ -56,7 +60,7 @@ function refreshComments(){
 						c.authorEmail = jQuery("input[name='authorEmail']", $theForm).val();
 						c.authorWebsite = jQuery("input[name='authorWebsite']", $theForm).val();
 						c.page.id = WSUtil.getCurrentID();
-						c.status=0;
+						c.status=1;
 						c.id=0;
 						c.text = jQuery("textarea[name='text']", $theForm).val();
 						

@@ -21,7 +21,7 @@ import rd.mgr.page.Page;
     @NamedQuery(name="pageComments.findAll",
                 query="SELECT pc FROM PageComment pc"),
     @NamedQuery(name="pageCommentsForPage", 
-    			query="from PageComment p where p.page =:page")
+    			query="from PageComment p where p.page =:page and status = 1")
 }) 
 public class PageComment {
 	@Id
@@ -47,6 +47,7 @@ public class PageComment {
 		this.authorEmail = authorEmail;
 		this.authorWebsite = authorWebsite;
 		this.page = p;
+		this.status = 1;
 	}
 	
 	public long getId() {
