@@ -155,7 +155,7 @@ public class Page {
 	public void setEdate(Date edate) {
 		this.edate = edate;
 	}
-	
+
 	/**
 	 * returns a hierarchical url: grandparenurl/parenturl/pageurl
 	 */

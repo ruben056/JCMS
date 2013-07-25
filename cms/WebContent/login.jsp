@@ -17,7 +17,8 @@
 <title>Administrator Login</title>
 </head>
 <body>
-
+<div id="header"></div>
+<h1>Login</h1>
 <div class="tabs">
 		<ul>
 			<li><a href="#tab1">Login</a>

@@ -16,6 +16,7 @@ import rd.util.ISpecialSelection;
  */
 public class GetPageHierarchy implements ISpecialSelection{
 
+	
 	@Override
 	public Object performSelection(EntityManager eMgr) {
 		/**
@@ -31,7 +32,7 @@ public class GetPageHierarchy implements ISpecialSelection{
 		
 		return obj;
 	}
-
+	
 	private PageJSTree[] retrieveChildren(EntityManager eMgr, Page[] rs){
 		PageJSTree[] children = new PageJSTree[rs.length];
 		

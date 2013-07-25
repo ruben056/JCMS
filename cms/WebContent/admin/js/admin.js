@@ -261,7 +261,7 @@ WSUtil.getPlugins = function(doneFunction, errFunction) {
 	}).done(function(data) {
 		WSUtil.processResponse(data, doneFunction);
 	}).fail(function(e){
-		errFunction(e);
+		alert(e);
 	});
 };
 
@@ -273,9 +273,46 @@ WSUtil.disablePlugin = function(doneFunction, name){
 	}).done(function(data) {
 		WSUtil.processResponse(data, doneFunction);
 	}).fail(function(e){
-		errFunction(e);
+		alert(e);
 	});
 };
+
+WSUtil.retrieveAllLayouts = function(doneFunction){		
+	$.ajax(	{
+		url:"/cms/admin/layout/controller",
+		type: "POST",
+		data: {"action":"retrieveAll"}
+	}).done(function(data) {
+		WSUtil.processResponse(data, doneFunction);
+	}).fail(function(e){
+		alert(e);
+	});
+};
+
+WSUtil.enableLayout = function(doneFunction, layoutID){		
+	$.ajax(	{
+		url:"/cms/admin/layout/controller",
+		type: "POST",
+		data: {"action":"enableLayout", "id":layoutID}
+	}).done(function(data) {
+		WSUtil.processResponse(data, doneFunction);
+	}).fail(function(e){
+		alert(e);
+	});
+};
+
+//WSUtil.saveLayout = function(doneFunction, layout){
+//	var s = JSON.stringify(layout);
+//	$.ajax(	{
+//		url:"/cms/admin/layout/controller",
+//		type: "POST",
+//		data: {"action":"save", "obj": s}
+//	}).done(function(data) {
+//		WSUtil.processResponse(data, doneFunction);
+//	}).fail(function(e){
+//		alert(e);
+//	});
+//};
 
 /**
  * Initialization of some global variables
@@ -315,6 +352,27 @@ $(function() {
 		
 		pageMgmt = new PageMgmt($leftMenu, $hasLeftMenu);
 		pageMgmt.initPages();
+		
+		e.preventDefault();
+		return false;
+	});
+	
+	var $pagesLink = $('div#menu-top li a[href="layout.jsp"]');
+	$pagesLink.click(function(e){
+		$wrapper.empty();
+		$('div#jstree-marker').remove();
+		$('div#jstree-marker-line').remove();
+//		$('div#vakata-contextmenu').remove();
+		$('div#ui-datepicker-div').remove();
+		
+		var $leftMenu = $('<div class="left-menu">');
+		var $hasLeftMenu = $('<div class="has-left-menu">');
+		$wrapper.append($('<h1>Layout</h1>'));
+		$wrapper.append($leftMenu);
+		$wrapper.append($hasLeftMenu);
+		
+		layoutMgmt = new LayoutMgmt($leftMenu, $hasLeftMenu);
+		layoutMgmt.initLayout();
 		
 		e.preventDefault();
 		return false;
@@ -387,6 +445,76 @@ $(function() {
 	});
 });
 
+
+/**
+ * ------------------------------------------------------------------------------------------------
+ * ALL FUNCTIONS FOR LAYOUT MANAGEMENT
+ * ------------------------------------------------------------------------------------------------
+ */
+
+function LayoutMgmt($leftMenu, $hasLeftMenu){
+	"use strict";
+	var $left = $leftMenu;
+	var $right = $hasLeftMenu;
+	
+	this.initLayout = function (){
+		"use strict";
+		var that = this;
+		var $a = $('<a href="#">Layout</a>');
+		$left.append($a);
+		$a.click(function(e){
+			$right.empty();
+			that.buildLayoutInfo();
+			
+			e.preventDefault();
+			return false;
+		});
+		WSUtil.retrieveAllLayouts(function(data){
+			$right.append($('<h2>Layout Management</h2>'));
+			that.buildLayoutInfo(data);
+		});
+		
+	};
+	
+	this.buildLayoutInfo = function(data){
+		"use strict";
+		var that = this;
+			
+		var $table = $('<table>');			
+		var $row1 = $('<tr><th>Layout Name</th><th>Active</th></tr>');
+		$table.append($row1);
+		var layouts = data.obj;
+		for(var i =0; i < layouts.length; i++){
+			var cur = layouts[i];
+			var name = cur["name"];
+			var active = cur["enabled"];
+			var msg = '<tr>';
+			msg += '<td>' + name + '</td>';		
+			if(active){
+				msg += '<td>enabled</td>';
+			}else{
+				msg += '<td><a href="#" args='+ cur["id"] +'>' + "enable" + '</a></td>'; // when clicking
+			}
+			 				
+			msg +=	'</tr>';
+	 				var $r = $(msg);
+			$table.append($r);
+		}
+		var $oldTable = jQuery("table", $right);
+		if($oldTable.length > 0){
+			$oldTable.replaceWith($table);
+		}else{
+			$right.append($table);
+		}
+					
+		$table.find("a[href=#]").click(function(e){
+			var layoutID = jQuery(this).attr("args");
+			WSUtil.enableLayout(function(data){
+				that.buildLayoutInfo(data); // refresh
+			}, layoutID);
+		});
+	};
+}
 /**
  * ------------------------------------------------------------------------------------------------
  * ALL FUNCTIONS FOR PLUGIN MANAGEMENT

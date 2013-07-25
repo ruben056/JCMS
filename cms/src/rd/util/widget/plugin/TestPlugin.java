@@ -1,10 +1,12 @@
 package rd.util.widget.plugin;
 
+import java.util.Vector;
+
 import javax.persistence.EntityManager;
 
-import rd.util.widget.BaseWidget;
+import rd.util.widget.IWidget;
 
-public class TestPlugin extends BaseWidget {
+public class TestPlugin implements IWidget {
 
 	public final static String REPLACE_PATTERN = "\\[\\[jCMS:testPlugin(.*?)\\]\\]";
 	
@@ -31,6 +33,16 @@ public class TestPlugin extends BaseWidget {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	@Override
+	public boolean isOnePerPage() {
+		return false;
+	}
+
+	@Override
+	public Vector<String> addStylesAndScripts(Vector<String> stylesAndScripts) {
+		return stylesAndScripts;
 	}
 
 }

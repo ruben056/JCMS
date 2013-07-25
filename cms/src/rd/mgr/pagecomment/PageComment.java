@@ -32,11 +32,13 @@ public class PageComment {
 	private String authorName;
 	private String authorEmail;
 	private String authorWebsite;
+	private int status;
+	private Date cDate;
+	
 	@ManyToOne
 	@JoinColumn(name="page_id")
 	private Page page;
-	private int status;
-	private Date cDate;
+	
 	
 	public PageComment(){}
 	

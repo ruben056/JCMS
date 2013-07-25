@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-codec-1.8.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-httpclient-3.0.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-lang3-3.1.jar" sourcepath="WebContent/WEB-INF/lib/commons-lang3-3.1-sources.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-primitives-1.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

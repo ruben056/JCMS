@@ -10,6 +10,9 @@ import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
 
+import rd.mgr.layout.BasicLayoutEngine;
+import rd.mgr.layout.ILayoutMgr;
+import rd.mgr.layout.Layout;
 import rd.mgr.page.IPageMgr;
 import rd.mgr.page.Page;
 import rd.mgr.page.selection.GetPageHierarchy;
@@ -37,27 +40,27 @@ public class TestClass {
 	 */
 	public static void main(String[] args) {
 	
-		testJsonParse();
+//		testJsonParse();
 //		testRegExp();
 //		testPluginParser();
-//		EntityManager eMgr = DBUtil.getLocalEmf().createEntityManager();		
-//		eMgr.getTransaction().begin();
-//		try {
-//			 /** perform some tests and some initialization here */
-////			createGroups(eMgr);
-////			createUser(eMgr);
-////			testPages(eMgr);
-////			testMenu(eMgr);
-////			testParse(eMgr);
-//			
-//			eMgr.getTransaction().commit();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			eMgr.getTransaction().rollback();
-//		} finally{
-//			eMgr.close();
-//		}
+		EntityManager eMgr = DBUtil.getLocalEmf().createEntityManager();		
+		eMgr.getTransaction().begin();
+		try {
+			 /** perform some tests and some initialization here */
+			createGroups(eMgr);
+			createUser(eMgr);
+			testPages(eMgr);
+//			testMenu(eMgr);
+//			testParse(eMgr);
+			
+			eMgr.getTransaction().commit();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			eMgr.getTransaction().rollback();
+		} finally{
+			eMgr.close();
+		}
 	}
 	
 	private static void testJsonParse(){
@@ -93,7 +96,7 @@ public class TestClass {
 		String toParse = "<html><head></head><body><h1>testing</h1> [[jCMS:rdMenu{'direction':'0'}]] qlmsdkfj lsdfjkqlmdsfkj [[jCMS:rdMenu{'direction':'0', 'opacity':'1'}]]</body></html>";
 		
 		Vector<String> v = new Vector<String>();
-		String res = ContentParser.parse(eMgr, toParse, v);
+		String res = ContentParser.parse(eMgr, toParse, v );
 		System.out.println(res);
 	}
 	
@@ -113,7 +116,7 @@ public class TestClass {
 		
 	}
 	
-	private static void testMenu(EntityManager eMgr){
+	private static void testMenu(EntityManager eMgr){		
 		RdMenu mnu = new RdMenu();
 		String s = mnu.toHTML(eMgr);
 		
@@ -121,6 +124,12 @@ public class TestClass {
 	}
 	
 	private static void testPages(EntityManager eMgr){
+		
+		// create the website first
+		Layout layout = new Layout();
+		layout.setName("test website"); // (no layout ==> default layout)
+		layout.setName(BasicLayoutEngine.LAYOUT_NAME);
+		layout = getWebSiteMgr().saveLayouts(eMgr, new Layout[]{layout})[0];
 		
 		// create some pages first
 		Page[] pages = new Page[4];
@@ -145,6 +154,7 @@ public class TestClass {
 		pages[3].setOrd(2);
 		
 		pages = getPageMgr().savePages(eMgr, pages);
+		GeneralUtil.logObject(pages);
 		
 		// retrieve hierarchy 
 		ISpecialSelection sel = new GetPageHierarchy();
@@ -230,4 +240,15 @@ public class TestClass {
 		return ComponentFactory.getPageCommentMgr();
 	}
 
+	private static ILayoutMgr getWebSiteMgr(){
+		return ComponentFactory.getLayoutMgr();
+	}
+	
+//	private static String getBody1(){
+//		return "<p>[[jCMS:rdMenu{&#39;direction&#39;:&#39;0&#39; }]]</p>\n\n<p><a href=\"#anker\">#anker</a></p>\n\n<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:500px\">\n\t<tbody>\n\t\t<tr>\n\t\t\t<td>msqdf</td>\n\t\t\t<td>fff</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>f</td>\n\t\t\t<td>lmj</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>l</td>\n\t\t\t<td>mmm</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>sdfsdf</td>\n\t\t\t<td>ffff</td>\n\t\t</tr>\n\t</tbody>\n</table>\n\n<p>qsdfqsdfqsdfqsdfsdf<img alt=\"\" src=\"/cmsUploadFolder/free-computer-wallpapers2-1.jpg\" style=\"float:left; height:188px; margin:5px; opacity:0.9; width:250px\" /></p>\n\n<p>sqfdqdf</p>\n\n<div>\n<p>&micro;&micro;&micro;<img alt=\"\" src=\"/cmsUploadFolder/cubes.jpg\" style=\"float:right; height:113px; margin:20px; width:200px\" /></p>\n\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n\n<div>\n<p>&nbsp;</p>\n\n<div>\n<p>anker testje&nbsp;<a id=\"anker\" name=\"anker\"></a></p>\n\n<div lang=\"javascript\" style=\"background:#eee;border:1px solid #ccc;padding:5px 10px;\" title=\"adv titel\">\n<p>nen div met wa rdinformatie</p>\n\n<p>funtion(){</p>\n\n<p>&nbsp;sqldmkfj &nbsp;mslkdf msqkdf qsmkjf</p>\n\n<p>}</p>\n</div>\n\n<p>[[jCMS:pageComments{}]]</p>\n</div>\n\n<p>&nbsp;</p>\n</div>\n</div>\n";
+//	}
+//	
+//	private static String getBody2(){
+//		return "<p>[[jCMS:rdMenu{&#39;direction&#39;:&#39;0&#39; }]]</p>\n\n<p>child1</p>\n\n<div class=\"rdsucces\">\n<p>rdsucces</p>\n</div>\n<div class=\"rderror\">\n<p>rderror</p>\n</div>\n\n<div class=\"rdalert\">\n<p>rdalert</p>\n</div>\n\n<div class=\"rdinfo\">\n<p>rdinfo</p>\n</div>\n\n<p>&nbsp;</p>\n";
+//	}
 }

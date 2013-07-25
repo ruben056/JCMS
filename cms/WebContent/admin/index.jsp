@@ -34,6 +34,7 @@
 	<div id="header">
 		<div id="menu-top">
 			<ul>
+				<li><a href="layout.jsp">Layout</a></li>
 				<li><a href="pages.jsp">Pages</a></li>
 				<li><a href="users.jsp">Users</a></li>
 				<li><a href="plugins.jsp">Plugins</a></li>

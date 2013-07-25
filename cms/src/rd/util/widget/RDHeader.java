@@ -6,6 +6,7 @@ public class RDHeader extends BaseWidget {
 
 	private final static String REPLACE_PATTERN = "\\[\\[jCMS:rdHeader(.*?)\\]\\]";
 	
+	
 	@Override
 	public String getReplacePattern() {
 		return RDHeader.REPLACE_PATTERN;

@@ -5,6 +5,10 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
+import rd.mgr.layout.BasicLayoutEngine;
+import rd.mgr.layout.DefaultLayoutEngine;
+import rd.mgr.layout.ILayoutMgr;
+import rd.mgr.layout.Layout;
 import rd.mgr.page.IPageMgr;
 import rd.mgr.page.Page;
 import rd.mgr.page.selection.GetPageHierarchy;
@@ -47,26 +51,37 @@ public class StartupServlet extends HttpServlet {
 	
 	private void testPages(EntityManager eMgr){
 		
+		// create the layouts first
+		Layout[] layouts = new Layout[2];
+		layouts[0] = new Layout();
+		layouts[0].setName(BasicLayoutEngine.LAYOUT_NAME);
+		layouts[0].setEnabled(true);
+		
+		layouts[1] = new Layout();
+		layouts[1].setName(DefaultLayoutEngine.LAYOUT_NAME);
+		
+		layouts = getLayoutMgr().saveLayouts(eMgr, layouts);
+		
+		
 		// create some pages first
 		Page[] pages = new Page[4];
 		pages[0] = new Page("testPage1", "den titel");
-//		pages[0].setBody("[[jCMS:rdMenu{'direction':'0' }]] <p> page1 </p> [[jCMS:testPlugin{'title': 'test argument titel'}]]");
-		pages[0].setBody(StartupServlet.getBody());
+		pages[0].setBody(StartupServlet.getBody1());
 		pages[0].setParentID(0);
 		pages[0].setOrd(1);
 		
 		pages[1] = new Page("testPage2", "ook root normaal");
-		pages[1].setBody("[[jCMS:rdMenu{'direction':'0' }]] <p> Page2</p>");
+		pages[1].setBody(" <p>Page2</p>");
 		pages[1].setParentID(0);
 		pages[1].setOrd(2);
 		
 		pages[2] = new Page("testPage2-child1");
-		pages[2].setBody("[[jCMS:rdMenu{'direction':'0' }]] <p> child1 </p>");
+		pages[2].setBody(StartupServlet.getBody2());
 		pages[2].setParentID(2);
 		pages[2].setOrd(1);
 		
 		pages[3] = new Page("testPage2-child2");
-		pages[3].setBody("[[jCMS:rdMenu{'direction':'0' }]]<p> child2 </p>");
+		pages[3].setBody("[<p> child2 </p>");
 		pages[3].setParentID(2);
 		pages[3].setOrd(2);
 		
@@ -154,7 +169,15 @@ public class StartupServlet extends HttpServlet {
 		return ComponentFactory.getPageCommentMgr();
 	}
 	
-	private static String getBody(){
-		return "<p>[[jCMS:rdMenu{&#39;direction&#39;:&#39;0&#39; }]]</p>\n\n<p><a href=\"#anker\">#anker</a></p>\n\n<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:500px\">\n\t<tbody>\n\t\t<tr>\n\t\t\t<td>msqdf</td>\n\t\t\t<td>fff</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>f</td>\n\t\t\t<td>lmj</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>l</td>\n\t\t\t<td>mmm</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>sdfsdf</td>\n\t\t\t<td>ffff</td>\n\t\t</tr>\n\t</tbody>\n</table>\n\n<p>qsdfqsdfqsdfqsdfsdf<img alt=\"\" src=\"/cmsUploadFolder/free-computer-wallpapers2-1.jpg\" style=\"float:left; height:188px; margin:5px; opacity:0.9; width:250px\" /></p>\n\n<p>sqfdqdf</p>\n\n<div>\n<p>&micro;&micro;&micro;<img alt=\"\" src=\"/cmsUploadFolder/cubes.jpg\" style=\"float:right; height:113px; margin:20px; width:200px\" /></p>\n\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n\n<div>\n<p>&nbsp;</p>\n\n<div>\n<p>anker testje&nbsp;<a id=\"anker\" name=\"anker\"></a></p>\n\n<div lang=\"javascript\" style=\"background:#eee;border:1px solid #ccc;padding:5px 10px;\" title=\"adv titel\">\n<p>nen div met wa informatie</p>\n\n<p>funtion(){</p>\n\n<p>&nbsp;sqldmkfj &nbsp;mslkdf msqkdf qsmkjf</p>\n\n<p>}</p>\n</div>\n\n<p>[[jCMS:pageComments{}]]</p>\n</div>\n\n<p>&nbsp;</p>\n</div>\n</div>\n";
+	private ILayoutMgr getLayoutMgr(){
+		return ComponentFactory.getLayoutMgr();
+	}
+	
+	private static String getBody1(){
+		return "<p></p>\n\n<p><a href=\"#anker\">#anker</a></p>\n\n<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:500px\">\n\t<tbody>\n\t\t<tr>\n\t\t\t<td>msqdf</td>\n\t\t\t<td>fff</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>f</td>\n\t\t\t<td>lmj</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>l</td>\n\t\t\t<td>mmm</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>sdfsdf</td>\n\t\t\t<td>ffff</td>\n\t\t</tr>\n\t</tbody>\n</table>\n\n<p>qsdfqsdfqsdfqsdfsdf<img alt=\"\" src=\"/cmsUploadFolder/free-computer-wallpapers2-1.jpg\" style=\"float:left; height:188px; margin:5px; opacity:0.9; width:250px\" /></p>\n\n<p>sqfdqdf</p>\n\n<div>\n<p>&micro;&micro;&micro;<img alt=\"\" src=\"/cmsUploadFolder/cubes.jpg\" style=\"float:right; height:113px; margin:20px; width:200px\" /></p>\n\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n\n<div>\n<p>&nbsp;</p>\n\n<div>\n<p>anker testje&nbsp;<a id=\"anker\" name=\"anker\"></a></p>\n\n<div lang=\"javascript\" style=\"background:#eee;border:1px solid #ccc;padding:5px 10px;\" title=\"adv titel\">\n<p>nen div met wa rdinformatie</p>\n\n<p>funtion(){</p>\n\n<p>&nbsp;sqldmkfj &nbsp;mslkdf msqkdf qsmkjf</p>\n\n<p>}</p>\n</div>\n\n<p>[[jCMS:pageComments{}]]</p>\n</div>\n\n<p>&nbsp;</p>\n</div>\n</div>\n";
+	}
+	
+	private static String getBody2(){
+		return "<p></p>\n\n<p>child1</p>\n\n<div class=\"rdsucces\">\n<p>rdsucces</p>\n</div>\n<div class=\"rderror\">\n<p>rderror</p>\n</div>\n\n<div class=\"rdalert\">\n<p>rdalert</p>\n</div>\n\n<div class=\"rdinfo\">\n<p>rdinfo</p>\n</div>\n\n<p>&nbsp;</p>\n";
 	}
 }

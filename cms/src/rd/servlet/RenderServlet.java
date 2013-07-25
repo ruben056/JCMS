@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import rd.mgr.layout.BasicLayoutEngine;
+import rd.mgr.layout.DefaultLayoutEngine;
+import rd.mgr.layout.ILayoutEngine;
+import rd.mgr.layout.Layout;
 import rd.mgr.page.Page;
 import rd.util.ComponentFactory;
 import rd.util.StringUtil;
@@ -44,7 +48,7 @@ public class RenderServlet extends HttpServlet {
 			result = performAction(eMgr, request, response);
 			eMgr.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.getCause().printStackTrace();
 			eMgr.getTransaction().rollback();
 		} finally{
 			response.getWriter().write(result);
@@ -54,30 +58,32 @@ public class RenderServlet extends HttpServlet {
 	
 	public String performAction(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, Exception{
 		
-		Page p = getPage(eMgr, req, resp);
-		// create header String
-		String metaData = getMetaData(p);
+		ILayoutEngine layoutEngine = getLayoutEngine(eMgr);
 		
-		// some templateing stuff, ... TODO... enhance
+		Page p = getPage(eMgr, req, resp);		
 		String template = getTemplate(eMgr, p);
 		
-		java.util.Vector<String> stylesAndScripts = new java.util.Vector<String>();
-		String tmpBody = ContentParser.parse(eMgr, p.getBody(), stylesAndScripts);
-		//add widget styles:
-		Iterator<String> it = stylesAndScripts.iterator();
-		while(it.hasNext()){
-			metaData += it.next();
+		layoutEngine.setPage(p);
+		layoutEngine.setTemplate(template);
+		layoutEngine.setEntityMgr(eMgr);
+		return layoutEngine.toHTML();
+		
+	}
+	
+	private ILayoutEngine getLayoutEngine(EntityManager eMgr){
+		
+		Layout sel = ComponentFactory.getLayoutMgr().getSelectedLayout(eMgr)[0];
+		ILayoutEngine result = null;
+		ILayoutEngine[] layoutEngines = new ILayoutEngine[]{new DefaultLayoutEngine(), new BasicLayoutEngine()};
+		for (int i = 0; i < layoutEngines.length; i++) {
+			ILayoutEngine cur = layoutEngines[i];
+			if(cur.isLayoutEngineFor(sel.getName())){
+				result = cur;
+				break;
+			}
 		}
-		// create body
-		String body = "<html><header>" + metaData +"</header><body>";
-		body += "<div id='pageWrapper' pageID='"+ p.getId() +"'>";
-//		body += "<div id='bodyWrapper'>";
-		body += tmpBody;
-//		body += "</div>";
-		body += "</div>";
-		body += "</body></html>" ;
-						
-		return body;
+		
+		return result;
 	}
 	
 	private String getTemplate(EntityManager eMgr, Page p){
@@ -120,19 +126,6 @@ public class RenderServlet extends HttpServlet {
 		}
 		
 		return p;
-	}
-	
-	private String getMetaData(Page p){
-		StringBuffer metaData = new StringBuffer();
-		metaData.append("<title>").append(
-				p.getTitle()== null ? p.getName(): p.getTitle()).append("</title>");
-		metaData.append("<script	src='http://code.jquery.com/jquery-1.9.1.js'></script>");
-		metaData.append("<script	src='http://code.jquery.com/ui/1.10.3/jquery-ui.js'></script>");
-		metaData.append("<link rel='stylesheet' href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'/>");
-		metaData.append("<link rel='stylesheet' href='/cms/css/main.css' />");
-		if(p.getKeywords() != null && p.getKeywords().length() > 0)
-			metaData.append("<meta http-equiv='keywords' content=" + p.getKeywords() +" />");
-		return metaData.toString();
 	}
 	
 	/**

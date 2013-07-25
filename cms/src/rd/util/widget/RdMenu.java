@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import javax.persistence.EntityManager;
 
+import rd.mgr.layout.Layout;
 import rd.mgr.page.Page;
 import rd.util.ComponentFactory;
 import rd.util.ENUM_UTIL;
@@ -21,11 +22,8 @@ public class RdMenu extends BaseWidget{
 	private String backGround = "";
 	private int columns = 1; // dropdown submenus
 	private int opacity = 1; // opacity of the submenus
-	
-	public RdMenu(){
-		
-	}
 
+	
 	public int getDirection() {
 		return direction;
 	}
@@ -97,7 +95,7 @@ public class RdMenu extends BaseWidget{
 	// TODO add order by here : book page 129
 	// retrieve all Pages for a certain parentPage:
 	private String buildList(EntityManager eMgr, long parentID, int depth){
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 	
 		Page[] childPages = ComponentFactory.getPageMgr().getPagesForParent(eMgr, parentID);
 		if(childPages.length < 1){

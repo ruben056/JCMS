@@ -15,19 +15,38 @@ public class WidgetFactory {
 	
 	// system/standard widgets go here as static String,
 	public static String RD_MENU = "rdMenu";
+	public static String RD_STICKY_FOOTER = "rdStickyFooter";
 
 	/**
 	 * 
 	 * @param jsonStringWitName: name + json representation of the widget example: rdMenu{'direction':'0', 'opacity':'1'}
 	 */
 	public static IWidget createWidget(EntityManager eMgr, String jsonStringWithName) throws Exception{
-		String name = jsonStringWithName.substring(0, jsonStringWithName.indexOf('{'));
-		String atts = jsonStringWithName.substring(jsonStringWithName.indexOf('{'));
+		
+		String name = "";
+		String atts = null;
+		if(jsonStringWithName.indexOf('{') > 1){
+			name = jsonStringWithName.substring(0, jsonStringWithName.indexOf('{'));
+			atts = jsonStringWithName.substring(jsonStringWithName.indexOf('{'));
+		}else{
+			name = jsonStringWithName;
+			atts = null;;
+		}
 
 		IWidget result = null;
 		
 		if(WidgetFactory.RD_MENU.equals(name)){
-			result = GeneralUtil.getGSON().fromJson(StringEscapeUtils.unescapeHtml4(atts), RdMenu.class);			
+			if(atts == null){
+				result = new RdMenu();
+			}else {
+				result = GeneralUtil.getGSON().fromJson(StringEscapeUtils.unescapeHtml4(atts), RdMenu.class);
+			}
+		}else if(WidgetFactory.RD_STICKY_FOOTER.equals(name)){
+			if(atts == null){
+				result = new RDStickyFooter();
+			}else {
+				result = GeneralUtil.getGSON().fromJson(StringEscapeUtils.unescapeHtml4(atts), RDStickyFooter.class);
+			}
 		}else{
 			System.out.println("Checking plugins for widget with name:" + name);
 			Plugin p = PluginFactory.getPluginForWidget(name);
@@ -38,7 +57,8 @@ public class WidgetFactory {
 			}
 			result = (IWidget)GeneralUtil.getGSON().fromJson(StringEscapeUtils.unescapeHtml4(atts), 
 					Class.forName(p.getWidgetClass()));
-		}
+		}		
+		
 		return result;
 	}
 }

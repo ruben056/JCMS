@@ -36,6 +36,7 @@ public class PageController extends ActionServlet {
 	}
 	
 	protected JSonResult performAction(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws IOException{
+		
 		JSonResult result = new JSonResult();
 		String action = getAction(req);
 		if(action == null){

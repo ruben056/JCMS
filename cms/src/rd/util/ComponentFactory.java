@@ -2,6 +2,7 @@ package rd.util;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import rd.mgr.layout.ILayoutMgr;
 import rd.mgr.page.IPageMgr;
 import rd.mgr.pagecomment.IPageCommentMgr;
 import rd.mgr.user.IUserMgr;
@@ -34,5 +35,13 @@ public class ComponentFactory {
 			pageCommentMgr = (IPageCommentMgr)ctx.getBean("PageCommentMgr");
 		}
 		return pageCommentMgr;
+	}
+	
+	private static ILayoutMgr layoutMgr = null;
+	public static ILayoutMgr getLayoutMgr(){
+		if(layoutMgr == null){
+			layoutMgr = (ILayoutMgr)ctx.getBean("LayoutMgr");
+		}
+		return layoutMgr;
 	}
 }

@@ -1,23 +1,23 @@
-
 <html>
 <header>
-	<title>den titel</title>
+	<title>ook root normaal</title>
 	<script src='http://code.jquery.com/jquery-1.9.1.js'></script>
 	<script src='http://code.jquery.com/ui/1.10.3/jquery-ui.js'></script>
 	<link rel='stylesheet'
 		href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' />
 	<link rel='stylesheet' href='/cms/css/main.css' />
+	<link rel='stylesheet' href='/cms/css/basiclayout.css' />
+	<link rel='stylesheet' href='/cms/themes/basic/css/main.css' />
 	<link rel='stylesheet' href='/cms/css/widgets/menuHorizontal.css' />
 	<script src='http://www.google.com/jsapi'></script>
-	<script>
-		google.load('mootools', '1.2.1');
-	</script>
+	<script src=''//ajax.googleapis.com/ajax/libs/mootools/1.4.5/mootools-yui-compressed.js'></script>
 	<script src='/cms/js/MenuMatic_0.68.3-source.js'></script>
-	<link rel='stylesheet' href='/cms/css/widgets/pageComments.css' />
-	<script src='/cms/js/widgets/pageComments.js'></script>
+	<script src='/cms/js/widgets/menu.js'></script>
+	<!--[if !IE 7]><style type='text/css'>#wrap {display:table;height:100%}</style><![endif]-->
 </header>
 <body>
-	<div id='pageWrapper'>
+	<div id='pageWrapper' pageID='2'>
+		<div id='header'></div>
 		<div id='menuWrapper'>
 			<ul id='nav'>
 				<li><a href='/cms/public/testPage1'>testPage1</a></li>
@@ -28,8 +28,6 @@
 					</ul></li>
 			</ul>
 		</div>
-		<script src='/cms/js/MenuMatic_0.68.3-source.js'></script>
-		<script src='/cms/js/widgets/menu.js'></script>
 		<script>
 			jQuery(document).ready(function() {
 				var myMenu = new MenuMatic({
@@ -38,7 +36,10 @@
 				});
 			});
 		</script>
-		<p>page1</p>
+		<p>Page2</p>
+	</div>
+	<div id='footer'>
+		<p>some footer content</p>
 	</div>
 </body>
 </html>

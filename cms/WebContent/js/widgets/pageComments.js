@@ -78,10 +78,10 @@ function refreshComments(){
 						}).fail(function(e){
 							console.log(e);
 						});
-					}finally{
-						e.preventDefault();
-						return false;
-					}					
+					}finally{						
+					}		
+					e.preventDefault();
+					return false;
 				});
 			});
 		}).fail(function(e){

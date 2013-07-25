@@ -2,8 +2,11 @@ package rd.util.widget;
 
 import java.util.Vector;
 
+import rd.mgr.layout.Layout;
+
 public abstract class BaseWidget implements IWidget {
 
+	
 	@Override
 	public boolean isOnePerPage() {
 		return false;
@@ -14,4 +17,5 @@ public abstract class BaseWidget implements IWidget {
 		
 		return stylesAndScripts;
 	}
+
 }
