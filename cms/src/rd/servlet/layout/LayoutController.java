@@ -2,7 +2,6 @@ package rd.servlet.layout;
 
 import java.io.IOException;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,8 +28,8 @@ public class LayoutController extends ActionServlet {
 	}
 	
 	@Override
-	protected JSonResult performAction(EntityManager eMgr,
-			HttpServletRequest req, HttpServletResponse resp)
+	protected JSonResult performAction(HttpServletRequest req,
+			HttpServletResponse resp)
 			throws IOException, ServletException {
 		
 		JSonResult result = new JSonResult();
@@ -38,15 +37,15 @@ public class LayoutController extends ActionServlet {
 		if(action == null){
 			// default action??
 		}else  if(action.equalsIgnoreCase("retrieveAll")){
-			result.setObj(retrieveLayouts(eMgr, req, resp));
+			result.setObj(retrieveLayouts(req, resp));
 			result.addMsg("The layouts have been reetrieve sucessfully.");
 			
 		}else  if(action.equalsIgnoreCase("enableLayout")){
-			result.setObj(enableLayout(eMgr, req, resp));
+			result.setObj(enableLayout(req, resp));
 			result.addMsg("The layout is enabled.");
 			
 		}else if(action.equalsIgnoreCase("save")){
-			result.setObj(saveLayouts(eMgr, req, resp));
+			result.setObj(saveLayouts(req, resp));
 			result.addMsg("The layouts have been saved.");
 		}else{
 			result.addMsg("The action " + action + " is not implemented on the servlet " + this.getClass().getName());
@@ -62,27 +61,27 @@ public class LayoutController extends ActionServlet {
 	 * @param resp
 	 * @return  All layouts so no second ajax call must be made to refresh the layout table
 	 */
-	private Layout[] enableLayout(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp){
+	private Layout[] enableLayout(HttpServletRequest req, HttpServletResponse resp){
 		String s = req.getParameter("id");
 		long id = Long.parseLong(s);
 		
-		Layout old = getLayoutMgr().getSelectedLayout(eMgr)[0];
+		Layout old = getLayoutMgr().getSelectedLayout()[0];
 		old.setEnabled(false);
 		
-		Layout cur = getLayoutMgr().getLayoutByID(eMgr, id);
+		Layout cur = getLayoutMgr().getLayoutByID( id);
 		cur.setEnabled(true);
 		
 		
-		getLayoutMgr().saveLayouts(eMgr, new Layout[]{cur, old});
+		getLayoutMgr().saveLayouts( new Layout[]{cur, old});
 		
-		return getLayoutMgr().getAllLayouts(eMgr);
+		return getLayoutMgr().getAllLayouts();
 	}
 	
-	private Layout[] retrieveLayouts(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp){
-		return getLayoutMgr().getAllLayouts(eMgr);
+	private Layout[] retrieveLayouts(HttpServletRequest req, HttpServletResponse resp){
+		return getLayoutMgr().getAllLayouts();
 	}
 	
-	private Layout[] saveLayouts(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp){
+	private Layout[] saveLayouts(HttpServletRequest req, HttpServletResponse resp){
 		String s= req.getParameter("obj");
 		if(StringUtil.isNull(s)){
 			return null;
@@ -90,7 +89,7 @@ public class LayoutController extends ActionServlet {
 		
 		Gson gson = GeneralUtil.getGSON();
 		Layout[] layouts = gson.fromJson(s, Layout[].class);
-		return getLayoutMgr().saveLayouts(eMgr, layouts);
+		return getLayoutMgr().saveLayouts(layouts);
 	}
 	
 	

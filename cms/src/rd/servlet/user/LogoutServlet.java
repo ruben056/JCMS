@@ -2,7 +2,6 @@ package rd.servlet.user;
 
 import java.io.IOException;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,8 +28,8 @@ public class LogoutServlet extends ActionServlet {
     }
 
 	@Override
-	protected JSonResult performAction(EntityManager eMgr,
-			HttpServletRequest req, HttpServletResponse resp)
+	protected JSonResult performAction(HttpServletRequest req,
+			HttpServletResponse resp)
 			throws IOException , ServletException{
 		
 		JSonResult res = new JSonResult();

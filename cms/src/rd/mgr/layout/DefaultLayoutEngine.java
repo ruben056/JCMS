@@ -2,8 +2,6 @@ package rd.mgr.layout;
 
 import java.util.Iterator;
 
-import javax.persistence.EntityManager;
-
 import rd.mgr.page.Page;
 import rd.util.StringUtil;
 import rd.util.widget.RdMenu;
@@ -15,7 +13,6 @@ public class DefaultLayoutEngine implements ILayoutEngine {
 	public static final String LAYOUT_NAME = "DefaultLayout" ;
 	private Page p ;
 	private String template ;
-	private EntityManager eMgr;
 	
 	public boolean isLayoutEngineFor(String layoutName){
 		return (StringUtil.isNull(layoutName) || layoutName.equalsIgnoreCase(DefaultLayoutEngine.LAYOUT_NAME));
@@ -30,12 +27,6 @@ public class DefaultLayoutEngine implements ILayoutEngine {
 	public void setTemplate(String template) {
 		this.template = template;
 	}
-
-
-	@Override
-	public void setEntityMgr(EntityManager eMgr) {
-		this.eMgr = eMgr;
-	}
 	
 	@Override
 	public String toHTML() throws Exception {
@@ -47,7 +38,7 @@ public class DefaultLayoutEngine implements ILayoutEngine {
 				java.util.Vector<String> stylesAndScripts = new java.util.Vector<String>();
 				RdMenu theMenu = new RdMenu();
 				theMenu.addStylesAndScripts(stylesAndScripts);
-				String tmpBody = ContentParser.parse(eMgr, p.getBody(), stylesAndScripts);
+				String tmpBody = ContentParser.parse( p.getBody(), stylesAndScripts);
 				//add widget styles:
 				Iterator<String> it = stylesAndScripts.iterator();
 				while(it.hasNext()){
@@ -56,7 +47,7 @@ public class DefaultLayoutEngine implements ILayoutEngine {
 				// create html
 				String body = "<html><header>" + metaData +"</header><body>";
 				body += "<div id='pageWrapper' pageID='"+ p.getId() +"'>";
-				body += theMenu.toHTML(eMgr);
+				body += theMenu.toHTML();
 				body += tmpBody;
 				body += "</div>";
 				body += "</body></html>" ;

@@ -1,8 +1,9 @@
 /* Stuff for header*/
 
-#header {
-	min-height: 142px;
+div#header {
+	min-height: 100px;
 }
+
 
 /* Stuff for the sticky footer */
 
@@ -28,5 +29,6 @@ html,body {
 }
 
 #footer,#header {
-	background: orange;	
+	background: orange;
+	color:white;	
 }

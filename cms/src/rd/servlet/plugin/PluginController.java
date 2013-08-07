@@ -2,7 +2,6 @@ package rd.servlet.plugin;
 
 import java.io.IOException;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +31,7 @@ public class PluginController  extends ActionServlet {
 		super.doPost(req, resp);
 	}
 	
-	protected JSonResult performAction(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws IOException{
+	protected JSonResult performAction(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		JSonResult result = new JSonResult();
 		String action = getAction(req);
 		if(action == null){

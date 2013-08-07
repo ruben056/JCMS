@@ -1,7 +1,5 @@
 package rd.mgr.page.selection;
 
-import javax.persistence.EntityManager;
-
 import rd.mgr.page.Page;
 import rd.util.ComponentFactory;
 import rd.util.ISpecialSelection;
@@ -18,29 +16,29 @@ public class GetPageHierarchy implements ISpecialSelection{
 
 	
 	@Override
-	public Object performSelection(EntityManager eMgr) {
+	public Object performSelection() {
 		/**
 		 * retrieve top level pages
 		 * select id,type,name,parent from pages where parent = $id order by ord asc
 		 *
 		 * recursive function to retrieve the children...
 		 */
-		Page[] rootPages = ComponentFactory.getPageMgr().getPagesForParent(eMgr, 0);
+		Page[] rootPages = ComponentFactory.getPageMgr().getPagesForParent(0);
 	
 		PageJSTree obj = new PageJSTree(0, "/", -1);
-		obj.setChildren(retrieveChildren(eMgr, rootPages)); // must contain retrieved hierarchy ...
+		obj.setChildren(retrieveChildren(rootPages)); // must contain retrieved hierarchy ...
 		
 		return obj;
 	}
 	
-	private PageJSTree[] retrieveChildren(EntityManager eMgr, Page[] rs){
+	private PageJSTree[] retrieveChildren(Page[] rs){
 		PageJSTree[] children = new PageJSTree[rs.length];
 		
 		for (int i = 0; i < rs.length; i++) {
 			Page cur = rs[i];
-			Page[] subChildren = ComponentFactory.getPageMgr().getPagesForParent(eMgr, cur.getId());
+			Page[] subChildren = ComponentFactory.getPageMgr().getPagesForParent(cur.getId());
 			children[i] = new PageJSTree(cur.getId(), cur.getName(), cur.getParentID());
-			children[i].setChildren(retrieveChildren(eMgr, subChildren));
+			children[i].setChildren(retrieveChildren(subChildren));
 		}
 		return children;
 	}

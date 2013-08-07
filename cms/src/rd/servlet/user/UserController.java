@@ -2,7 +2,6 @@ package rd.servlet.user;
 
 import java.io.IOException;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,23 +36,23 @@ public class UserController extends ActionServlet {
 	}
 
 	@Override
-	protected JSonResult performAction(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws IOException{
+	protected JSonResult performAction(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		JSonResult result = new JSonResult();
 		String action = getAction(req);
 		if(action == null){
 			// default action??
 		}else if(action.equalsIgnoreCase("GetAllGroups")){
-			result.setObj(getUserMgr().getAllGroups(eMgr));
+			result.setObj(getUserMgr().getAllGroups());
 		}else if(action.equalsIgnoreCase("GetUsersForList")){
-			result.setObj(this.getUsersFromList(eMgr, req));
+			result.setObj(this.getUsersFromList( req));
 		}else if(action.equalsIgnoreCase("delete")){
-			this.deleteUser(eMgr, req, resp);
+			this.deleteUser( req, resp);
 			result.setObj("");
 			result.addMsg("user deleted succesfully");
 		}else if(action.equalsIgnoreCase("GetByID")){
-			result.setObj(this.getUserById(eMgr, req, resp));
+			result.setObj(this.getUserById( req, resp));
 		}else if(action.equalsIgnoreCase("Save")){
-			result.setObj(this.saveUser(eMgr, req, resp));
+			result.setObj(this.saveUser( req, resp));
 		}else{
 			result.addMsg("The action " + action + " is not implemented on the servlet " + this.getClass().getName());
 		}
@@ -63,23 +62,23 @@ public class UserController extends ActionServlet {
 
 //	---------------------------------------------------------
 	
-	private User saveUser(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws IOException{
+	private User saveUser( HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		String json = req.getParameter("object");
 		User u = GeneralUtil.getGSON().fromJson(json, User.class);
-		return getUserMgr().saveUser(eMgr, u);
+		return getUserMgr().saveUser( u);
 	}
 	
-	private User getUserById(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws IOException{
+	private User getUserById( HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		long id = Long.parseLong(req.getParameter("id"));
-		return getUserMgr().getUserByID(eMgr, id);
+		return getUserMgr().getUserByID( id);
 	}
 	
-	private void deleteUser(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws IOException{
+	private void deleteUser( HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		long userID = Long.parseLong(req.getParameter("id"));
-		getUserMgr().deleteUser(eMgr, userID);
+		getUserMgr().deleteUser( userID);
 	}
 	
-	private User[] getUsersFromList(EntityManager eMgr, HttpServletRequest req) throws IOException{
-		return getUserMgr().getAllUsers(eMgr );
+	private User[] getUsersFromList( HttpServletRequest req) throws IOException{
+		return getUserMgr().getAllUsers( );
 	}
 }

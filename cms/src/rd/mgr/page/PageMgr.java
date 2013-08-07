@@ -6,18 +6,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+
+import rd.util.db.DBUtil;
 
 public class PageMgr implements IPageMgr {
 
 	@Override
-	public Page savePage(EntityManager eMgr, Page page) {
-		return savePages(eMgr, new Page[]{page})[0];
+	public Page savePage( Page page) {
+		return savePages(new Page[]{page})[0];
 	}
 
 	@Override
-	public Page[] savePages(EntityManager eMgr, Page[] pages) {
+	public Page[] savePages( Page[] pages) {
 		
 		
 		if(pages == null || pages.length == 0){
@@ -28,16 +29,16 @@ public class PageMgr implements IPageMgr {
 		for (int i = 0; i < pages.length; i++) {
 			Page page = pages[i];
 			if(page.getId() <= 0){
-				eMgr.persist(page);
+				DBUtil.getEntityMgr().persist(page);
 			}else{
-				eMgr.merge(page);
+				DBUtil.getEntityMgr().merge(page);
 			}
 			if((page.getSpecial()&1) == 1)
 				homeIDs.add(page.getId());
 		}
 		
 		/* check for exactly one home page, if multiple choose one of the new ones, if none make one of the new ones homepage */
-		Page[] homes = getHomePage(eMgr);
+		Page[] homes = getHomePage();
 		if(homeIDs.size() > 0){
 			if(homes.length == 0){
 				pages[0].setSpecial(pages[0].getSpecial()|1);
@@ -60,15 +61,15 @@ public class PageMgr implements IPageMgr {
 	}
 
 	@Override
-	public Page[] getPagesForParent(EntityManager eMgr, long parentID) {
+	public Page[] getPagesForParent( long parentID) {
 		
-		TypedQuery<Page> qry = eMgr.createNamedQuery("getPagesForParent", Page.class);
+		TypedQuery<Page> qry = DBUtil.getEntityMgr().createNamedQuery("getPagesForParent", Page.class);
 		qry.setParameter("parent", parentID);
 		return convertToArr(qry.getResultList());
 	}
 	
-	public Page[] getAvailableParentPages(EntityManager eMgr, long parentID, long pageID){
-		TypedQuery<Page> qry = eMgr.createNamedQuery("getAvailableParentPages", Page.class);
+	public Page[] getAvailableParentPages( long parentID, long pageID){
+		TypedQuery<Page> qry = DBUtil.getEntityMgr().createNamedQuery("getAvailableParentPages", Page.class);
 		qry.setParameter("parent", parentID);
 		qry.setParameter("id", pageID);
 		return convertToArr(qry.getResultList());
@@ -83,33 +84,33 @@ public class PageMgr implements IPageMgr {
 		return result;
 	}
 	
-	public Page getPageById(EntityManager eMgr, long id){
-		return eMgr.find(Page.class, id);
+	public Page getPageById( long id){
+		return DBUtil.getEntityMgr().find(Page.class, id);
 	}
 	
 	@Override
-	public void deletePage(EntityManager eMgr, long id) {
-		Page p = getPageById(eMgr, id);
-		eMgr.remove(p);
+	public void deletePage( long id) {
+		Page p = getPageById( id);
+		DBUtil.getEntityMgr().remove(p);
 	}
 	
 	@Override
-	public Page[] getPageByName(EntityManager eMgr, String name) {
-		TypedQuery<Page> qry = eMgr.createNamedQuery("getPageByName", Page.class);
+	public Page[] getPageByName( String name) {
+		TypedQuery<Page> qry = DBUtil.getEntityMgr().createNamedQuery("getPageByName", Page.class);
 		qry.setParameter("name", name);
 		return convertToArr(qry.getResultList());
 	}
 
 	@Override
-	public Page[] getHomePage(EntityManager eMgr) {
-		 List<Page> pages = (List<Page>)eMgr.createNativeQuery(
+	public Page[] getHomePage() {
+		 List<Page> pages = (List<Page>)DBUtil.getEntityMgr().createNativeQuery(
 				 "SELECT * FROM pages where special&1", Page.class).getResultList(); 
 		return convertToArr(pages);
 	}
 
 	@Override
-	public Page[] getHomePageAndNot(EntityManager eMgr, int pageID) {
-		List<Page> pages = (List<Page>)eMgr.createNativeQuery(
+	public Page[] getHomePageAndNot( int pageID) {
+		List<Page> pages = (List<Page>)DBUtil.getEntityMgr().createNativeQuery(
 				 "SELECT * FROM pages where special&1 and id!="+pageID, Page.class).getResultList(); 
 		return convertToArr(pages);
 	}

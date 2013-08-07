@@ -1,6 +1,5 @@
 package rd.util.widget;
 
-import javax.persistence.EntityManager;
 
 public class RDHeader extends BaseWidget {
 
@@ -13,7 +12,7 @@ public class RDHeader extends BaseWidget {
 	}
 
 	@Override
-	public String toHTML(EntityManager eMgr) {
+	public String toHTML() {
 		StringBuilder sb = new StringBuilder("<div id='rdHeader'>");
 		
 		

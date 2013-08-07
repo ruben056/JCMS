@@ -29,10 +29,10 @@ public abstract class ActionServlet extends HttpServlet {
 		
 		JSonResult result = null;
 		
-		EntityManager eMgr = DBUtil.getEmf().createEntityManager();
+		EntityManager eMgr = DBUtil.initEmgr();
 		eMgr.getTransaction().begin();
 		try {
-			result = performAction(eMgr, req, resp);
+			result = performAction(req, resp);
 			eMgr.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -45,7 +45,7 @@ public abstract class ActionServlet extends HttpServlet {
 		}
 	}
 	
-	protected abstract JSonResult performAction(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) 
+	protected abstract JSonResult performAction(HttpServletRequest req, HttpServletResponse resp) 
 			throws IOException, ServletException;
 	
 	protected String getAction(HttpServletRequest req){

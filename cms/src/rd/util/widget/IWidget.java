@@ -2,12 +2,10 @@ package rd.util.widget;
 
 import java.util.Vector;
 
-import javax.persistence.EntityManager;
-
 public interface IWidget {
 
 	public String getReplacePattern();
-	public String toHTML(EntityManager eMgr);
+	public String toHTML();
 	
 	/**
 	 * If this returns true, it means the widget can only be used once on a page

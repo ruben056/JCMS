@@ -2,8 +2,6 @@ package rd.util.widget.plugin;
 
 import java.util.Vector;
 
-import javax.persistence.EntityManager;
-
 import rd.util.widget.IWidget;
 
 public class TestPlugin implements IWidget {
@@ -18,7 +16,7 @@ public class TestPlugin implements IWidget {
 	}
 
 	@Override
-	public String toHTML(EntityManager eMgr) {
+	public String toHTML() {
 		StringBuilder sb = new StringBuilder("<div>");
 		// TODO Auto-generated method stub
 		sb.append("title: " + getTitle());

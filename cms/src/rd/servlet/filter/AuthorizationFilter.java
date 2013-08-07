@@ -46,18 +46,16 @@ public class AuthorizationFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		// place your code here
-		EntityManager eMgr = DBUtil.getEmf().createEntityManager();
+		EntityManager eMgr = DBUtil.initEmgr();
 		eMgr.getTransaction().begin();
+		boolean allowed = false;
 		try {
 //			String url = ((HttpServletRequest)request).getRequestURL().toString();
 //			String queryString = ((HttpServletRequest)request).getQueryString();		
 			HttpSession session = ((HttpServletRequest)request).getSession();
 			
-			if(!checkUserAccount(eMgr, session)){
-				ctx.getRequestDispatcher("/login.jsp").forward(request, response);
-			}else{
-				chain.doFilter(request, response);
-			}
+			allowed = checkUserAccount(session);
+			
 			eMgr.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,7 +64,11 @@ public class AuthorizationFilter implements Filter {
 			eMgr.close();
 		}
 		
-		
+		if(!allowed){
+			ctx.getRequestDispatcher("/login.jsp").forward(request, response);
+		}else{
+			chain.doFilter(request, response);
+		}
 	}
 
 	/**
@@ -75,13 +77,12 @@ public class AuthorizationFilter implements Filter {
 	public void init(FilterConfig fConfig) throws ServletException {
 		ctx = fConfig.getServletContext();
 	}
-
 	
-	private boolean checkUserAccount(EntityManager eMgr, HttpSession session){
+	private boolean checkUserAccount(HttpSession session){
 		Object o = session.getAttribute("user");		
 		if(o != null && o instanceof User){
 			User u = (User)o;
-			u = ComponentFactory.getUserMgr().getUserByEmail(eMgr, u.getEmail());
+			u = ComponentFactory.getUserMgr().getUserByEmail(u.getEmail());
 			java.util.Iterator<Group> it = u.getGroups().iterator();
 			while(it.hasNext()){
 				Group g = it.next();

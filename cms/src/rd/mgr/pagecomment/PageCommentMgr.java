@@ -3,15 +3,15 @@ package rd.mgr.pagecomment;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import rd.mgr.page.Page;
+import rd.util.db.DBUtil;
 
 public class PageCommentMgr implements IPageCommentMgr {
 
 	@Override
-	public PageComment[] savePageComments(EntityManager eMgr, PageComment[] pcs) {
+	public PageComment[] savePageComments( PageComment[] pcs) {
 				
 		if(pcs == null || pcs.length == 0){
 			return new PageComment[0];
@@ -20,18 +20,18 @@ public class PageCommentMgr implements IPageCommentMgr {
 		for (int i = 0; i < pcs.length; i++) {
 			PageComment pc = pcs[i];
 			if(pc.getId() <= 0){
-				eMgr.persist(pc);
+				DBUtil.getEntityMgr().persist(pc);
 			}else{
-				eMgr.merge(pc);
+				DBUtil.getEntityMgr().merge(pc);
 			}
 		}		
 		return pcs;
 	}
 	
 	@Override
-	public PageComment[] getPageCommentsForPage(EntityManager eMgr, Page p) {
+	public PageComment[] getPageCommentsForPage( Page p) {
 		
-		TypedQuery<PageComment> qry = eMgr.createNamedQuery("pageCommentsForPage", PageComment.class);
+		TypedQuery<PageComment> qry = DBUtil.getEntityMgr().createNamedQuery("pageCommentsForPage", PageComment.class);
 		qry.setParameter("page", p);
 		return convertToArr(qry.getResultList());
 	}

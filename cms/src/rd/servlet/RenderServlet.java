@@ -1,7 +1,6 @@
 package rd.servlet;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
@@ -18,7 +17,6 @@ import rd.mgr.page.Page;
 import rd.util.ComponentFactory;
 import rd.util.StringUtil;
 import rd.util.db.DBUtil;
-import rd.util.widget.parser.ContentParser;
 
 /**
  * This servlets retrieves a page, and renders the output.
@@ -42,10 +40,10 @@ public class RenderServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String result = null;
 		
-		EntityManager eMgr = DBUtil.getEmf().createEntityManager();
+		EntityManager eMgr = DBUtil.initEmgr();
 		eMgr.getTransaction().begin();
 		try {
-			result = performAction(eMgr, request, response);
+			result = performAction(request, response);
 			eMgr.getTransaction().commit();
 		} catch (Exception e) {
 			e.getCause().printStackTrace();
@@ -56,23 +54,21 @@ public class RenderServlet extends HttpServlet {
 		}
 	}
 	
-	public String performAction(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, Exception{
+	public String performAction(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, Exception{
 		
-		ILayoutEngine layoutEngine = getLayoutEngine(eMgr);
+		ILayoutEngine layoutEngine = getLayoutEngine();
 		
-		Page p = getPage(eMgr, req, resp);		
-		String template = getTemplate(eMgr, p);
+		Page p = getPage( req, resp);		
+		String template = getTemplate( p);
 		
 		layoutEngine.setPage(p);
 		layoutEngine.setTemplate(template);
-		layoutEngine.setEntityMgr(eMgr);
 		return layoutEngine.toHTML();
-		
 	}
 	
-	private ILayoutEngine getLayoutEngine(EntityManager eMgr){
+	private ILayoutEngine getLayoutEngine(){
 		
-		Layout sel = ComponentFactory.getLayoutMgr().getSelectedLayout(eMgr)[0];
+		Layout sel = ComponentFactory.getLayoutMgr().getSelectedLayout()[0];
 		ILayoutEngine result = null;
 		ILayoutEngine[] layoutEngines = new ILayoutEngine[]{new DefaultLayoutEngine(), new BasicLayoutEngine()};
 		for (int i = 0; i < layoutEngines.length; i++) {
@@ -86,7 +82,7 @@ public class RenderServlet extends HttpServlet {
 		return result;
 	}
 	
-	private String getTemplate(EntityManager eMgr, Page p){
+	private String getTemplate( Page p){
 		String template = getServletContext().getContextPath()+"/themes/basic/html/" + 
 				(StringUtil.isNull(p.getTemplate())?"default":p.getTemplate()) 
 						+ ".html";
@@ -102,24 +98,24 @@ public class RenderServlet extends HttpServlet {
 	 * 3. if no param is given retrieve home page
 	 * @return
 	 */
-	private Page getPage(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp){
+	private Page getPage( HttpServletRequest req, HttpServletResponse resp){
 		Page p = null;
 		String o = req.getParameter("id");
 		if(o != null){
 			long id = Long.parseLong((String)o);
-			p = ComponentFactory.getPageMgr().getPageById(eMgr, id);
+			p = ComponentFactory.getPageMgr().getPageById( id);
 			if(p==null){
 				//TODO throw some kind of error
 			}
 		}else if((o = req.getParameter("name")) != null){			
-			Page[] pages = ComponentFactory.getPageMgr().getPageByName(eMgr, o);
+			Page[] pages = ComponentFactory.getPageMgr().getPageByName( o);
 			if(pages != null && pages.length > 0){
 				p = pages[0];
 			}else{
 				//TODO throw some kind of error
 			}
 		}else{
-			Page[] home = ComponentFactory.getPageMgr().getHomePage(eMgr);
+			Page[] home = ComponentFactory.getPageMgr().getHomePage();
 			if(home != null && home.length > 0){
 				p = home[0];
 			}

@@ -1,6 +1,5 @@
 package rd.util.widget;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -21,7 +20,7 @@ public class WidgetFactory {
 	 * 
 	 * @param jsonStringWitName: name + json representation of the widget example: rdMenu{'direction':'0', 'opacity':'1'}
 	 */
-	public static IWidget createWidget(EntityManager eMgr, String jsonStringWithName) throws Exception{
+	public static IWidget createWidget(String jsonStringWithName) throws Exception{
 		
 		String name = "";
 		String atts = null;

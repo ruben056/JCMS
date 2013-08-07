@@ -2,7 +2,6 @@ package rd.servlet.user;
 
 import java.io.IOException;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,8 +28,8 @@ public class LoginServlet extends ActionServlet{
     }
 
 	@Override
-	protected JSonResult performAction(EntityManager eMgr,
-			HttpServletRequest req, HttpServletResponse resp)
+	protected JSonResult performAction(HttpServletRequest req,
+			HttpServletResponse resp)
 			throws IOException, ServletException {
 		
 		JSonResult res = new JSonResult();
@@ -38,7 +37,7 @@ public class LoginServlet extends ActionServlet{
 		String email = req.getParameter("email");
 		String pass = req.getParameter("pass");
 		
-		User u = getUserMgr().getUserByEmail(eMgr, email);
+		User u = getUserMgr().getUserByEmail( email);
 		if(u != null){
 			if(pass.equals(u.getPass())){
 				//login sucessfull... add session info

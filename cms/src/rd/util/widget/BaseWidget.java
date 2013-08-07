@@ -2,8 +2,6 @@ package rd.util.widget;
 
 import java.util.Vector;
 
-import rd.mgr.layout.Layout;
-
 public abstract class BaseWidget implements IWidget {
 
 	

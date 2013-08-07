@@ -43,7 +43,7 @@ public class TestClass {
 //		testJsonParse();
 //		testRegExp();
 //		testPluginParser();
-		EntityManager eMgr = DBUtil.getLocalEmf().createEntityManager();		
+		EntityManager eMgr = DBUtil.initEmgr(true);		
 		eMgr.getTransaction().begin();
 		try {
 			 /** perform some tests and some initialization here */
@@ -96,7 +96,7 @@ public class TestClass {
 		String toParse = "<html><head></head><body><h1>testing</h1> [[jCMS:rdMenu{'direction':'0'}]] qlmsdkfj lsdfjkqlmdsfkj [[jCMS:rdMenu{'direction':'0', 'opacity':'1'}]]</body></html>";
 		
 		Vector<String> v = new Vector<String>();
-		String res = ContentParser.parse(eMgr, toParse, v );
+		String res = ContentParser.parse(toParse, v );
 		System.out.println(res);
 	}
 	
@@ -118,7 +118,7 @@ public class TestClass {
 	
 	private static void testMenu(EntityManager eMgr){		
 		RdMenu mnu = new RdMenu();
-		String s = mnu.toHTML(eMgr);
+		String s = mnu.toHTML();
 		
 		System.out.println("result:\n" + s);;
 	}
@@ -129,7 +129,7 @@ public class TestClass {
 		Layout layout = new Layout();
 		layout.setName("test website"); // (no layout ==> default layout)
 		layout.setName(BasicLayoutEngine.LAYOUT_NAME);
-		layout = getWebSiteMgr().saveLayouts(eMgr, new Layout[]{layout})[0];
+		layout = getWebSiteMgr().saveLayouts(new Layout[]{layout})[0];
 		
 		// create some pages first
 		Page[] pages = new Page[4];
@@ -153,12 +153,12 @@ public class TestClass {
 		pages[3].setParentID(2);
 		pages[3].setOrd(2);
 		
-		pages = getPageMgr().savePages(eMgr, pages);
+		pages = getPageMgr().savePages(pages);
 		GeneralUtil.logObject(pages);
 		
 		// retrieve hierarchy 
 		ISpecialSelection sel = new GetPageHierarchy();
-		Object o = sel.performSelection(eMgr);
+		Object o = sel.performSelection();
 		System.out.println("Result of the special selection:");
 		if(o == null){
 			System.out.println("returned null");
@@ -171,33 +171,33 @@ public class TestClass {
 		pcs[0] = new PageComment("1.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite.be", pages[0]);		
 		pcs[1] = new PageComment("2.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite2.be", pages[1]);
 		pcs[2] = new PageComment("3.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite.be", pages[0]);
-		pcs = getPageCommentMgr().savePageComments(eMgr, pcs);
+		pcs = getPageCommentMgr().savePageComments(pcs);
 		GeneralUtil.logObject(pcs);
 		
-		pcs = getPageCommentMgr().getPageCommentsForPage(eMgr, pages[0]);
+		pcs = getPageCommentMgr().getPageCommentsForPage(pages[0]);
 		System.out.println("pcs for first page : ");
 		GeneralUtil.logObject(pcs);
 	}
 	
 	private static void createGroups(EntityManager eMgr){
 		
-		Group[] groups = getUserMgr().getAllGroups(eMgr);
+		Group[] groups = getUserMgr().getAllGroups();
 		if(groups.length > 0){
 			System.out.println("Groups allready present:");
 			return;					
 		}
 		
 		groups = new Group[]{new Group("_administrator"), new Group("_superadministrator")};
-		groups = getUserMgr().saveGroups(eMgr, groups);
+		groups = getUserMgr().saveGroups( groups);
 		
-		groups = getUserMgr().getAllGroups(eMgr);
+		groups = getUserMgr().getAllGroups();
 		System.out.println("--curent groups --- ");
 		GeneralUtil.logObject(groups);
 	}
 	
 	private static void createUser(EntityManager eMgr) {
 
-		User[] users = getUserMgr().getAllUsers(eMgr);
+		User[] users = getUserMgr().getAllUsers();
 		if(users.length > 0){
 			System.out.println("there are users in the db ... skip creation of users");
 			return;
@@ -207,7 +207,7 @@ public class TestClass {
 		User[] newUsers = new User[]{
 				new User("demuynck_ruben@hotmail.com", "zimzimma"),
 				new User("rudy@hotmail.com", "zimzimma")};
-		Group[] grps = getUserMgr().getAllGroups(eMgr);
+		Group[] grps = getUserMgr().getAllGroups();
 		newUsers[0].addGroup(grps[0]);
 		newUsers[0].setActive(true);
 
@@ -218,7 +218,7 @@ public class TestClass {
 		GeneralUtil.logObject(newUsers);
 		
 		// persist user
-		getUserMgr().saveUsers(eMgr, newUsers);
+		getUserMgr().saveUsers(newUsers);
 		System.out.println("--- logging after saving: ---");
 		GeneralUtil.logObject(newUsers);
 		

@@ -3,7 +3,6 @@ package rd.mgr.page;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
@@ -161,12 +160,12 @@ public class Page {
 	 */
 	@Transient
 	private String relativeURL = null;
-	public String getRelativeURL(EntityManager eMgr){
+	public String getRelativeURL(){
 		if(this.relativeURL == null){
 		
 			if(parentID != 0){
-				Page parent = ComponentFactory.getPageMgr().getPageById(eMgr, this.getParentID());
-				this.relativeURL = parent.getRelativeURL(eMgr);
+				Page parent = ComponentFactory.getPageMgr().getPageById(this.getParentID());
+				this.relativeURL = parent.getRelativeURL();
 			}else{
 				this.relativeURL = "/cms/public"; //this is depending on the context
 			}

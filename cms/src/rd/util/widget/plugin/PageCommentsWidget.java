@@ -2,8 +2,6 @@ package rd.util.widget.plugin;
 
 import java.util.Vector;
 
-import javax.persistence.EntityManager;
-
 import rd.util.widget.BaseWidget;
 
 public class PageCommentsWidget extends BaseWidget {
@@ -16,7 +14,7 @@ public class PageCommentsWidget extends BaseWidget {
 	}
 
 	@Override
-	public String toHTML(EntityManager eMgr) {
+	public String toHTML() {
 		StringBuilder sb = new StringBuilder("");
 		// the content is completely rendered via ajax calls in thejavascript files
 		// it retreives a view, then retrieves comments and adds them

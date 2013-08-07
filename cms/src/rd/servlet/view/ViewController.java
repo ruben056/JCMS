@@ -3,7 +3,6 @@ package rd.servlet.view;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +33,7 @@ public class ViewController extends ActionServlet {
 	}
 
 	@Override
-	protected JSonResult performAction(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp)
+	protected JSonResult performAction(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		
 		JSonResult result = new JSonResult();

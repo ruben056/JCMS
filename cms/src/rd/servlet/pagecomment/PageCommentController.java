@@ -2,7 +2,6 @@ package rd.servlet.pagecomment;
 
 import java.io.IOException;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,8 +26,8 @@ public class PageCommentController extends ActionServlet {
 		resp.getWriter().write("PageController online");
 	}
 	@Override
-	protected JSonResult performAction(EntityManager eMgr,
-			HttpServletRequest req, HttpServletResponse resp)
+	protected JSonResult performAction(HttpServletRequest req,
+			HttpServletResponse resp)
 			throws IOException, ServletException {
 
 		JSonResult result = new JSonResult();
@@ -37,34 +36,34 @@ public class PageCommentController extends ActionServlet {
 		if(action == null){
 			result.addError("No action supplied");
 		}else if("saveComment".equals(action)){
-			result.setObj(saveComments(eMgr, req, resp));
+			result.setObj(saveComments( req, resp));
 			result.addMsg("comments saved successfully");
 		}else if("getCommentForPage".equals(action)){
-			result.setObj(getCommentsForPage(eMgr, req, resp));
+			result.setObj(getCommentsForPage( req, resp));
 			result.addMsg("comments retrieved successfully");
 		}
 		
 		return result;
 	}
 
-	private PageComment[] getCommentsForPage(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp){
+	private PageComment[] getCommentsForPage(HttpServletRequest req, HttpServletResponse resp){
 		String s = req.getParameter("pageID");
 		if(StringUtil.isNull(s)){
 			return new PageComment[0];
 		}
 		long pageId = Long.parseLong(s);
-		Page p = getPageMgr().getPageById(eMgr, pageId);
-		PageComment[] pcs = ComponentFactory.getPageCommentMgr().getPageCommentsForPage(eMgr, p);
+		Page p = getPageMgr().getPageById( pageId);
+		PageComment[] pcs = ComponentFactory.getPageCommentMgr().getPageCommentsForPage( p);
 		return pcs;
 	}
 	
-	private PageComment[] saveComments(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp){
+	private PageComment[] saveComments(HttpServletRequest req, HttpServletResponse resp){
 		String o = req.getParameter("object");
 		if(StringUtil.isNull(o)){
 			return new PageComment[0];
 		}
 		
 		PageComment pc = GeneralUtil.getGSON().fromJson(o, PageComment.class);
-		return ComponentFactory.getPageCommentMgr().savePageComments(eMgr, new PageComment[]{pc});
+		return ComponentFactory.getPageCommentMgr().savePageComments( new PageComment[]{pc});
 	}
 }

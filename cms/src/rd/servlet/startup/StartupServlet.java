@@ -32,7 +32,7 @@ public class StartupServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		EntityManager eMgr = DBUtil.getEmf().createEntityManager();
+		EntityManager eMgr = DBUtil.initEmgr();
 		eMgr.getTransaction().begin();
 		try {
 			 /** perform some tests and some initialization here */
@@ -60,7 +60,7 @@ public class StartupServlet extends HttpServlet {
 		layouts[1] = new Layout();
 		layouts[1].setName(DefaultLayoutEngine.LAYOUT_NAME);
 		
-		layouts = getLayoutMgr().saveLayouts(eMgr, layouts);
+		layouts = getLayoutMgr().saveLayouts( layouts);
 		
 		
 		// create some pages first
@@ -85,11 +85,11 @@ public class StartupServlet extends HttpServlet {
 		pages[3].setParentID(2);
 		pages[3].setOrd(2);
 		
-		pages = getPageMgr().savePages(eMgr, pages);
+		pages = getPageMgr().savePages( pages);
 		
 		// retrieve hierarchy 
 		ISpecialSelection sel = new GetPageHierarchy();
-		Object o = sel.performSelection(eMgr);
+		Object o = sel.performSelection();
 		System.out.println("Result of the special selection:");
 		if(o == null){
 			System.out.println("returned null");
@@ -101,33 +101,33 @@ public class StartupServlet extends HttpServlet {
 		pcs[0] = new PageComment("1.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite.be", pages[0]);
 		pcs[1] = new PageComment("2.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite2.be", pages[1]);
 		pcs[2] = new PageComment("3.bla bal comentaar is gemakkelijk e", "van ik", "bla@hotmail.com", "www.minsite.be", pages[0]);
-		pcs = getPageCommentMgr().savePageComments(eMgr, pcs);
+		pcs = getPageCommentMgr().savePageComments( pcs);
 		GeneralUtil.logObject(pcs);
 		
-		pcs = getPageCommentMgr().getPageCommentsForPage(eMgr, pages[0]);
+		pcs = getPageCommentMgr().getPageCommentsForPage( pages[0]);
 		System.out.println("pcs for first page : ");
 		GeneralUtil.logObject(pcs);
 	}
 	
 	private void createGroups(EntityManager eMgr){
 		
-		Group[] groups = getUserMgr().getAllGroups(eMgr);
+		Group[] groups = getUserMgr().getAllGroups();
 		if(groups.length > 0){
 			System.out.println("Groups allready present:");
 			return;					
 		}
 		
 		groups = new Group[]{new Group("_administrator"), new Group("_superadministrator")};
-		groups = getUserMgr().saveGroups(eMgr, groups);
+		groups = getUserMgr().saveGroups( groups);
 		
-		groups = getUserMgr().getAllGroups(eMgr);
+		groups = getUserMgr().getAllGroups();
 		System.out.println("--curent groups --- ");
 		GeneralUtil.logObject(groups);
 	}
 	
 	private void createUser(EntityManager eMgr) {
 
-		User[] users = getUserMgr().getAllUsers(eMgr);
+		User[] users = getUserMgr().getAllUsers();
 		if(users.length > 0){
 			System.out.println("there are users in the db ... skip creation of users");
 			return;
@@ -137,7 +137,7 @@ public class StartupServlet extends HttpServlet {
 		User[] newUsers = new User[]{
 				new User("demuynck_ruben@hotmail.com", "zimzimma"),
 				new User("rudy@hotmail.com", "zimzimma")};
-		Group[] grps = getUserMgr().getAllGroups(eMgr);
+		Group[] grps = getUserMgr().getAllGroups();
 		newUsers[0].addGroup(grps[0]);
 		newUsers[0].setActive(true);
 
@@ -148,7 +148,7 @@ public class StartupServlet extends HttpServlet {
 		GeneralUtil.logObject(newUsers);
 		
 		// persist user
-		getUserMgr().saveUsers(eMgr, newUsers);
+		getUserMgr().saveUsers( newUsers);
 		System.out.println("--- logging after saving: ---");
 		GeneralUtil.logObject(newUsers);
 		

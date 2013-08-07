@@ -2,8 +2,6 @@ package rd.util.widget;
 
 import java.util.Vector;
 
-import javax.persistence.EntityManager;
-
 /**
  * This is a sticky footer.
  * It as a div that is at the bottom of the page, even if there is no content on the page.
@@ -24,7 +22,7 @@ public class RDStickyFooter extends BaseWidget{
 	}
 
 	@Override
-	public String toHTML(EntityManager eMgr) {
+	public String toHTML() {
 		StringBuilder sb = new StringBuilder("<div id='wrap'>");
 		sb.append("<div id='main' class='clearfix'>");
 		sb.append("</div>");

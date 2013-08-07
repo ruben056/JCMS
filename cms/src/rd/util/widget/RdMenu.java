@@ -2,9 +2,6 @@ package rd.util.widget;
 
 import java.util.Vector;
 
-import javax.persistence.EntityManager;
-
-import rd.mgr.layout.Layout;
 import rd.mgr.page.Page;
 import rd.util.ComponentFactory;
 import rd.util.ENUM_UTIL;
@@ -74,11 +71,11 @@ public class RdMenu extends BaseWidget{
 	}
 	
 	@Override
-	public String toHTML(EntityManager eMgr) {
+	public String toHTML() {
 		
 		StringBuilder s = new StringBuilder("<div id='menuWrapper'>");
 		s.append("<ul id='nav'>");
-		s.append(buildList(eMgr, getParent(), 0));
+		s.append(buildList(getParent(), 0));
 		s.append("</ul>");
 		s.append("</div>");
 
@@ -94,10 +91,10 @@ public class RdMenu extends BaseWidget{
 	
 	// TODO add order by here : book page 129
 	// retrieve all Pages for a certain parentPage:
-	private String buildList(EntityManager eMgr, long parentID, int depth){
+	private String buildList(long parentID, int depth){
 		StringBuilder sb = new StringBuilder();
 	
-		Page[] childPages = ComponentFactory.getPageMgr().getPagesForParent(eMgr, parentID);
+		Page[] childPages = ComponentFactory.getPageMgr().getPagesForParent(parentID);
 		if(childPages.length < 1){
 			return "";
 		}
@@ -122,8 +119,8 @@ public class RdMenu extends BaseWidget{
 			if((child.getSpecial()&2) == 2) // skip hidden pages
 				continue;;
 				
-			sb.append("<li><a href='" +  child.getRelativeURL(eMgr)).append("'>").append(child.getName()).append("</a>");
-			sb.append(buildList(eMgr, child.getId(), depth+1));
+			sb.append("<li><a href='" +  child.getRelativeURL()).append("'>").append(child.getName()).append("</a>");
+			sb.append(buildList(child.getId(), depth+1));
 			sb.append("</li>");
 		}
 		if(depth != 0)sb.append("</ul>");

@@ -3,24 +3,17 @@ package rd.mgr.layout;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.collections.primitives.ArrayLongList;
 import org.apache.commons.collections.primitives.LongList;
-import org.apache.commons.collections.primitives.adapters.LongListList;
 
-import rd.mgr.page.Page;
+import rd.util.db.DBUtil;
 
 public class LayoutMgr implements ILayoutMgr {
-
-//	@Override
-//	public Layout getWebSiteById(EntityManager eMgr, long id){
-//		return eMgr.find(Layout.class, id);
-//	}
 	
 	@Override
-	public Layout[] saveLayouts(EntityManager eMgr, Layout[] layouts) {
+	public Layout[] saveLayouts(Layout[] layouts) {
 		if (layouts == null || layouts.length == 0) {
 			return null;
 		}
@@ -29,15 +22,15 @@ public class LayoutMgr implements ILayoutMgr {
 		for (int i = 0; i < layouts.length; i++) {
 			Layout cur = layouts[i];
 			if (cur.getId() <= 0) {
-				eMgr.persist(cur);
+				DBUtil.getEntityMgr().persist(cur);
 			} else {
-				eMgr.merge(cur);
+				DBUtil.getEntityMgr().merge(cur);
 			}
 			if(cur.isEnabled())
 				ll.add(cur.getId());
 		}
 		
-		Layout[] selected = getSelectedLayout(eMgr);
+		Layout[] selected = getSelectedLayout();
 		if(selected.length > 0){
 			if(selected.length != 1){
 				short s = 0;
@@ -62,14 +55,14 @@ public class LayoutMgr implements ILayoutMgr {
 	}
 
 	@Override
-	public Layout[] getSelectedLayout(EntityManager eMgr) {
-		TypedQuery<Layout> qry = eMgr.createNamedQuery("layout.findSelected", Layout.class);
+	public Layout[] getSelectedLayout() {
+		TypedQuery<Layout> qry = DBUtil.getEntityMgr().createNamedQuery("layout.findSelected", Layout.class);
 		return convertToArr(qry.getResultList());
 	}
 	
 	@Override
-	public Layout[] getAllLayouts(EntityManager eMgr) {
-		TypedQuery<Layout> qry = eMgr.createNamedQuery("layout.findAll", Layout.class);
+	public Layout[] getAllLayouts() {
+		TypedQuery<Layout> qry = DBUtil.getEntityMgr().createNamedQuery("layout.findAll", Layout.class);
 		return convertToArr(qry.getResultList());
 	}
 
@@ -83,7 +76,7 @@ public class LayoutMgr implements ILayoutMgr {
 	}
 	
 	@Override
-	public Layout getLayoutByID(EntityManager eMgr, long id){
-		return eMgr.find(Layout.class, id);
+	public Layout getLayoutByID(long id){
+		return DBUtil.getEntityMgr().find(Layout.class, id);
 	}
 }

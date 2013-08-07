@@ -1,18 +1,17 @@
 package rd.mgr.user;
 
-import javax.persistence.EntityManager;
 
 
 public interface IUserMgr {
 
-	public Group[] getAllGroups(EntityManager eMgr);
-	public Group[] saveGroups(EntityManager eMgr, Group[] groups);
+	public Group[] getAllGroups();
+	public Group[] saveGroups( Group[] groups);
 	
-	public User getUserByID(EntityManager eMgr, long id);	
-	public void deleteUser(EntityManager eMgr, long id);
+	public User getUserByID( long id);	
+	public void deleteUser( long id);
 	
-	public User[] getAllUsers(EntityManager eMgr);
-	public User saveUser(EntityManager eMgr, User usr);
-	public User[] saveUsers(EntityManager eMgr, User[] usrs);
-	public User getUserByEmail(EntityManager eMgr, String email);
+	public User[] getAllUsers();
+	public User saveUser( User usr);
+	public User[] saveUsers( User[] usrs);
+	public User getUserByEmail( String email);
 }

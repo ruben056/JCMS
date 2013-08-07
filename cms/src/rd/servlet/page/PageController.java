@@ -2,7 +2,6 @@ package rd.servlet.page;
 
 import java.io.IOException;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +34,7 @@ public class PageController extends ActionServlet {
 		super.doPost(req, resp);
 	}
 	
-	protected JSonResult performAction(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws IOException{
+	protected JSonResult performAction(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		
 		JSonResult result = new JSonResult();
 		String action = getAction(req);
@@ -44,30 +43,29 @@ public class PageController extends ActionServlet {
 		}else if(action.equalsIgnoreCase("Update Page Details")
 				|| action.equalsIgnoreCase("Insert Page Details")){
 			
-			result.setObj(updatePageDetails(eMgr, req, resp));
+			result.setObj(updatePageDetails(req, resp));
 			
 		}else if(action.equalsIgnoreCase("RetrieveNode")){
 			ISpecialSelection sel = new GetPageHierarchy();
-			result.setObj(sel.performSelection(eMgr));
+			result.setObj(sel.performSelection());
 			
 		}else if(action.equalsIgnoreCase("getPageById")){
 			Object tmp = req.getParameter("id");
 			if(tmp != null){
-				result.setObj(getPageMgr().getPageById(eMgr, 
-						Long.parseLong((String)tmp)));
+				result.setObj(getPageMgr().getPageById(Long.parseLong((String)tmp)));
 			}
 			
 		}else if(action.equalsIgnoreCase("getParents")){
 			// TODO Retrieve possible parents for the page
 			// --> special selection
-			result.setObj(retrieveParents(eMgr, req, resp));
+			result.setObj(retrieveParents( req, resp));
 			
 		}else if(action.equalsIgnoreCase("MovePage")){
-			movePage(eMgr, req, resp);
+			movePage( req, resp);
 			result.addMsg("The page has been moved.");
 			
 		}else if(action.equalsIgnoreCase("DeletePage")){
-			deletePage(eMgr, req, resp);
+			deletePage( req, resp);
 			result.addMsg("The page has been removed.");
 		}else{
 			result.addMsg("The action " + action + " is not implemented on the servlet " + this.getClass().getName());
@@ -75,9 +73,9 @@ public class PageController extends ActionServlet {
 		return result;
 	}
 	
-	private void deletePage(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws IOException{
+	private void deletePage(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		long id = Long.parseLong((String)(req.getParameter("id")));
-		getPageMgr().deletePage(eMgr, id);
+		getPageMgr().deletePage( id);
 	}
 	
 	/**
@@ -89,17 +87,17 @@ public class PageController extends ActionServlet {
 	 * @return
 	 * @throws IOException
 	 */
-	private void movePage(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws IOException{
+	private void movePage(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		long id = Long.parseLong((String)(req.getParameter("id")));
 		long newParent = Long.parseLong((String)(req.getParameter("newparent_id")));
-		Page p = getPageMgr().getPageById(eMgr, id);
+		Page p = getPageMgr().getPageById( id);
 		p.setParentID(newParent);
 		
 		// TODO rearange order of pages in new parent
 		Object o = (req.getParameter("order"));
 		int[] newOrder = GeneralUtil.getGSON().fromJson((String)o, int[].class);
 		for (int i = 0; i < newOrder.length; i++) {
-			getPageMgr().getPageById(eMgr, newOrder[i]).setOrd(i+1);
+			getPageMgr().getPageById( newOrder[i]).setOrd(i+1);
 		}
 	}
 	
@@ -113,7 +111,7 @@ public class PageController extends ActionServlet {
 	 * @return TODO
 	 * @throws IOException 
 	 */
-	private Object retrieveParents(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp) throws IOException{
+	private Object retrieveParents(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		GetOptionsForParentCBO sel = new GetOptionsForParentCBO();
 		long pageId = 0;
 		Object o = req.getParameter("id");
@@ -121,13 +119,13 @@ public class PageController extends ActionServlet {
 			pageId = Long.parseLong((String)o);
 		}
 		sel.setPageID(pageId);
-		return sel.performSelection(eMgr);
+		return sel.performSelection();
 	}
 	
-	private Page updatePageDetails(EntityManager eMgr, HttpServletRequest req, HttpServletResponse resp){
+	private Page updatePageDetails(HttpServletRequest req, HttpServletResponse resp){
 		
 		String json = req.getParameter("object");
 		Page page = GeneralUtil.getGSON().fromJson(json, Page.class);
-		return getPageMgr().savePage(eMgr, page);
+		return getPageMgr().savePage( page);
 	}
 }

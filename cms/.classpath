@@ -18,5 +18,13 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-httpclient-3.0.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-lang3-3.1.jar" sourcepath="WebContent/WEB-INF/lib/commons-lang3-3.1-sources.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-primitives-1.0.jar"/>
+	<classpathentry kind="lib" path="/home/ruben/Documents/Java/aopalliance/aopalliance.jar"/>
+	<classpathentry kind="lib" path="/home/ruben/Documents/Java/aspectj-1.8.0.M1/lib/aspectjrt.jar"/>
+	<classpathentry kind="lib" path="/home/ruben/Documents/Java/aspectj-1.8.0.M1/lib/aspectjweaver.jar"/>
+	<classpathentry kind="lib" path="/home/ruben/Documents/Java/spring-framework-3.2.2.RELEASE/libs/spring-aop-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/home/ruben/Documents/Java/spring-framework-3.2.2.RELEASE/libs/spring-aspects-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/home/ruben/Documents/Java/spring-framework-3.2.2.RELEASE/libs/spring-context-support-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/home/ruben/Documents/Java/spring-framework-3.2.2.RELEASE/libs/spring-orm-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/home/ruben/Documents/Java/spring-framework-3.2.2.RELEASE/libs/spring-tx-3.2.2.RELEASE.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

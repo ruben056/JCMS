@@ -3,8 +3,6 @@ package rd.util.widget.parser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.persistence.EntityManager;
-
 import rd.util.widget.IWidget;
 import rd.util.widget.WidgetFactory;
 
@@ -21,16 +19,16 @@ public class ContentParser {
 	 * @param content
 	 * @return
 	 */
-	public static String parse(EntityManager eMgr, String content, java.util.Vector<String> stylesAndScripts) throws Exception {
+	public static String parse(String content, java.util.Vector<String> stylesAndScripts) throws Exception {
 
 		String result = content;
 		Pattern p = Pattern.compile(ContentParser.SEARCH_PATTERN);
 		Matcher m = p.matcher(content);
 		if(m.find()){
-			IWidget w = WidgetFactory.createWidget(eMgr, m.group(1));
+			IWidget w = WidgetFactory.createWidget(m.group(1));
 			w.addStylesAndScripts(stylesAndScripts);
-			String tmp = content.replaceFirst(w.getReplacePattern(), w.toHTML(eMgr));
-			result = ContentParser.parse(eMgr, tmp, stylesAndScripts);
+			String tmp = content.replaceFirst(w.getReplacePattern(), w.toHTML());
+			result = ContentParser.parse(tmp, stylesAndScripts);
 		}
 		return result; 
 	}

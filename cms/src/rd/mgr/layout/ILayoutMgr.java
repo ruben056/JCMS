@@ -1,6 +1,5 @@
 package rd.mgr.layout;
 
-import javax.persistence.EntityManager;
 
 public interface ILayoutMgr {
 
@@ -13,7 +12,7 @@ public interface ILayoutMgr {
 	 * @param site
 	 * @return
 	 */
-	public Layout[] saveLayouts(EntityManager eMgr, Layout[] layouts);
+	public Layout[] saveLayouts(Layout[] layouts);
 	
 	/**
 	 * retrieve the enabled/selected layout
@@ -21,7 +20,7 @@ public interface ILayoutMgr {
 	 * @param eMgr
 	 * @return
 	 */
-	public Layout[] getSelectedLayout(EntityManager eMgr); 
+	public Layout[] getSelectedLayout(); 
 	
 	/**
 	 * Retrieve all layouts 
@@ -29,7 +28,7 @@ public interface ILayoutMgr {
 	 * @param eMgr
 	 * @return
 	 */
-	public Layout[] getAllLayouts(EntityManager eMgr);
+	public Layout[] getAllLayouts();
 	
-	public Layout getLayoutByID(EntityManager eMgr, long id);
+	public Layout getLayoutByID(long id);
 }
