@@ -1,5 +1,8 @@
 package rd.servlet.startup;
 
+import java.util.Iterator;
+import java.util.Properties;
+
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,6 +42,7 @@ public class StartupServlet extends HttpServlet {
 			createGroups(eMgr);
 			createUser(eMgr);
 			testPages(eMgr);
+			logProps();
 			eMgr.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -46,6 +50,21 @@ public class StartupServlet extends HttpServlet {
 			eMgr.getTransaction().rollback();
 		} finally{
 			eMgr.close();
+		}
+	}
+	
+
+	
+	/**
+	* can be interesting to look at properties of the remote environment 
+	*/
+	private static void logProps(){
+		Properties props = System.getProperties();
+		Iterator<Object> it = System.getProperties().keySet().iterator();
+		for (int i = 0; it.hasNext(); i++) {
+			String key = (String)it.next();
+			String val = (String)props.getProperty(key);
+			System.out.println(i+1 + ". " + key + " = " + val);
 		}
 	}
 	
@@ -106,7 +125,7 @@ public class StartupServlet extends HttpServlet {
 		
 		pcs = getPageCommentMgr().getPageCommentsForPage( pages[0]);
 		System.out.println("pcs for first page : ");
-		GeneralUtil.logObject(pcs);
+		GeneralUtil.logObject(pcs);		
 	}
 	
 	private void createGroups(EntityManager eMgr){

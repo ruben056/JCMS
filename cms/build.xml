@@ -10,6 +10,15 @@
 		<antcall target="restartTomcat7"/>
 	</target>
 
+	<target name="moveForOpenShift" description="build and deploy the war file">			
+			<antcall target="makeWar"/>
+			<move file="/home/ruben/Documents/Java/workspace/cms/dist/cms.war" todir="/home/ruben/Documents/Java/openshift/rd/webapps">
+			</move>
+			<exec executable="/bin/bash">
+					<arg value="/home/ruben/Documents/Java/openshift/rd/deploy" />
+			</exec>
+	</target>
+	
 	<target name="makeWar">
 		<mkdir dir="dist" />
 		<war destfile="dist/cms.war" needxmlfile="false">
