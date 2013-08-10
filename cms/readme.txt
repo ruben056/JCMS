@@ -78,3 +78,91 @@ OPENSHIFT_JBOSSEWS_VERSION=2.0
 HISTFILE=/var/lib/openshift/51e3a9ac4382ecad930000ed/app-root/data/.bash_history
 OPENSHIFT_CARTRIDGE_SDK_RUBY=/usr/lib/openshift/cartridge_sdk/ruby/sdk.rb
 _=/bin/env
+
+
+system properties:
+------------------
+1. java.vendor = Oracle Corporation
+
+2. sun.java.launcher = SUN_STANDARD
+3. catalina.base = /var/lib/openshift/51e3a9ac4382ecad930000ed/jbossews/
+4. sun.management.compiler = HotSpot Tiered Compilers
+5. catalina.useNaming = true
+6. os.name = Linux
+7. sun.boot.class.path = /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre/lib/alt-rt.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre/lib/resources.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre/lib/rt.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre/lib/jsse.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre/lib/jce.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre/lib/charsets.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre/lib/netx.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre/lib/plugin.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre/lib/rhino.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre/lib/jfr.jar:/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre/classes
+8. java.util.logging.config.file = /var/lib/openshift/51e3a9ac4382ecad930000ed/jbossews//conf/logging.properties
+9. OPENSHIFT_APP_UUID = 51e3a9ac4382ecad930000ed
+10. java.vm.specification.vendor = Oracle Corporation
+11. java.runtime.version = 1.7.0_25-mockbuild_2013_06_26_07_26-b00
+12. user.name = 51e3a9ac4382ecad930000ed
+13. shared.loader = 
+14. tomcat.util.buf.StringCache.byte.enabled = true
+
+15. user.language = en
+16. java.naming.factory.initial = org.apache.naming.java.javaURLContextFactory
+17. sun.boot.library.path = /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre/lib/i386
+18. java.version = 1.7.0_25
+19. java.util.logging.manager = org.apache.juli.ClassLoaderLogManager
+20. user.timezone = America/New_York
+21. java.net.preferIPv4Stack = true
+22. sun.arch.data.model = 32
+23. java.endorsed.dirs = 
+24. sun.cpu.isalist = 
+25. sun.jnu.encoding = ANSI_X3.4-1968
+26. file.encoding.pkg = sun.io
+27. package.access = sun.,org.apache.catalina.,org.apache.coyote.,org.apache.tomcat.,org.apache.jasper.
+
+28. file.separator = /
+
+29. java.specification.name = Java Platform API Specification
+30. java.class.version = 51.0
+31. user.country = US
+32. java.home = /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre
+33. java.vm.info = mixed mode
+34. os.version = 2.6.32-358.14.1.el6.x86_64
+
+35. sun.font.fontmanager = sun.awt.X11FontManager
+36. path.separator = :
+
+37. javax.accessibility.assistive_technologies = org.GNOME.Accessibility.JavaBridge
+38. java.vm.version = 23.7-b01
+39. jboss.i18n.generate-proxies = true
+40. java.awt.printerjob = sun.print.PSPrinterJob
+41. sun.io.unicode.encoding = UnicodeLittle
+42. tomcat.util.scan.DefaultJarScanner.jarsToSkip = bootstrap.jar,commons-daemon.jar,tomcat-juli.jar,annotations-api.jar,el-api.jar,jsp-api.jar,servlet-api.jar,catalina.jar,catalina-ant.jar,catalina-ha.jar,catalina-tribes.jar,jasper.jar,jasper-el.jar,ecj-*.jar,tomcat-api.jar,tomcat-util.jar,tomcat-coyote.jar,tomcat-dbcp.jar,tomcat-jni.jar,tomcat-spdy.jar,tomcat-i18n-en.jar,tomcat-i18n-es.jar,tomcat-i18n-fr.jar,tomcat-i18n-ja.jar,tomcat-juli-adapters.jar,catalina-jmx-remote.jar,catalina-ws.jar,tomcat-jdbc.jar,commons-beanutils*.jar,commons-codec*.jar,commons-collections*.jar,commons-dbcp*.jar,commons-digester*.jar,commons-fileupload*.jar,commons-httpclient*.jar,commons-io*.jar,commons-lang*.jar,commons-logging*.jar,commons-math*.jar,commons-pool*.jar,jstl.jar,geronimo-spec-jaxrpc*.jar,wsdl4j*.jar,ant.jar,ant-junit*.jar,aspectj*.jar,jmx.jar,h2*.jar,hibernate*.jar,httpclient*.jar,jmx-tools.jar,jta*.jar,log4j*.jar,mail*.jar,slf4j*.jar,xercesImpl.jar,xmlParserAPIs.jar,xml-apis.jar,access-bridge-64.jar,dnsns.jar,jaccess.jar,ldapsec.jar,localedata.jar,sunjce_provider.jar,sunmscapi.jar,sunpkcs11.jar,jhall.jar,tools.jar,sunec.jar,zipfs.jar,gnome-java-bridge.jar,pulse-java.jar,apple_provider.jar,AppleScriptEngine.jar,CoreAudio.jar,dns_sd.jar,j3daudio.jar,j3dcore.jar,j3dutils.jar,jai_core.jar,jai_codec.jar,mlibwrapper_jai.jar,MRJToolkit.jar,vecmath.jar,junit.jar,junit-*.jar,ant-launcher.jar
+
+43. awt.toolkit = sun.awt.X11.XToolkit
+
+44. package.definition = sun.,java.,org.apache.catalina.,org.apache.coyote.,org.apache.tomcat.,org.apache.jasper.
+45. java.naming.factory.url.pkgs = org.apache.naming
+46. user.home = /var/lib/openshift/51e3a9ac4382ecad930000ed
+47. org.apache.catalina.startup.ContextConfig.jarsToSkip = 
+48. java.specification.vendor = Oracle Corporation
+49. java.library.path = /usr/java/packages/lib/i386:/lib:/usr/lib
+
+50. java.vendor.url = http://java.oracle.com/
+51. org.apache.catalina.startup.TldConfig.jarsToSkip = 
+52. java.vm.vendor = Oracle Corporation
+
+53. common.loader = ${catalina.base}/lib,${catalina.base}/lib/*.jar,${catalina.home}/lib,${catalina.home}/lib/*.jar
+54. java.runtime.name = OpenJDK Runtime Environment
+55. sun.java.command = org.apache.catalina.startup.Bootstrap start
+56. java.class.path = :/var/lib/openshift/51e3a9ac4382ecad930000ed/jbossews//bin/bootstrap.jar:/var/lib/openshift/51e3a9ac4382ecad930000ed/jbossews//bin/commons-logging-tomcat-juli.jar:/var/lib/openshift/51e3a9ac4382ecad930000ed/jbossews//bin/tomcat-juli.jar:/usr/share/java/commons-daemon.jar
+57. java.vm.specification.name = Java Virtual Machine Specification
+58. java.vm.specification.version = 1.7
+
+59. catalina.home = /var/lib/openshift/51e3a9ac4382ecad930000ed/jbossews/
+60. sun.cpu.endian = little
+61. sun.os.patch.level = unknown
+62. java.io.tmpdir = /var/lib/openshift/51e3a9ac4382ecad930000ed/jbossews//tmp
+63. java.vendor.url.bug = http://bugreport.sun.com/bugreport/
+64. server.loader = 
+65. os.arch = i386
+66. java.awt.graphicsenv = sun.awt.X11GraphicsEnvironment
+67. java.ext.dirs = /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.25/jre/lib/ext:/usr/java/packages/lib/ext
+68. user.dir = /var/lib/openshift/51e3a9ac4382ecad930000ed/jbossews
+69. line.separator = 
+
+70. java.vm.name = OpenJDK Server VM
+71. file.encoding = UTF-8
+72. java.specification.version = 1.7

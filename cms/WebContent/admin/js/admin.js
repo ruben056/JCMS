@@ -827,33 +827,9 @@ function PageMgmt($leftMenu, $hasLeftMenu) {
 			$pageLink.hide();
 			$(".tabs").tabs();
 			
-//			var $thePageForm = $("form#pages_form");
-//			var changeTooltipPosition = function(event) {
-//			  $('div.ui-tooltip').css({top: event.pageY -5});
-//			  if(event.pageX <= $thePageForm.offset().left -50){
-//				  hideTooltip();
-//			  }else{
-//				  
-//			  }
-//			};
-//			var showTooltip = function(event) {
-//				$('div.ui-tooltip').remove();
-//				var $tip = $('<div class="ui-tooltip">Save</div>');
-////				$tip.addClass(".ui-tooltip");
-//				$tip.appendTo('body').css({left: $thePageForm.offset().left + 100});
-//				changeTooltipPosition(event);
-//			};
-//			var hideTooltip = function() {
-//			   $('div.ui-tooltip').remove();
-//			};
-//			$thePageForm.bind({
-//				   mousemove : changeTooltipPosition//,
-////				   mouseenter : showTooltip,
-////				   mouseleave : hideTooltip
-//				});
 			that.fillParentPagesList(currentpageid);
 			that.formAction();
-			CKEDITOR.replace( 'body',
+			var editor = CKEDITOR.replace( 'body',
 				    {
 				        filebrowserBrowseUrl : '/cms/admin/browser/browse',
 //						filebrowserBrowseUrl : '/cms/admin/browser/browser.jsp?dir=/usr/share/tomcat7/webapps/cmsUploadFolder',
@@ -861,7 +837,15 @@ function PageMgmt($leftMenu, $hasLeftMenu) {
 				        filebrowserWindowWidth : '320',
 				        filebrowserWindowHeight : '240'
 				    });
-		}, function(e) {
+			
+			editor.on("instanceReady",function() {
+				editor.addCommand( "save", {
+				    modes : { wysiwyg:1, source:1 },
+				    exec : that.savePage
+				 });
+			});
+				
+			}, function(e) {
 			alert(e);
 		});
 	};
@@ -883,72 +867,74 @@ function PageMgmt($leftMenu, $hasLeftMenu) {
 		"use strict";
 		var that=this;
 		var $submit = $("input#submitForm");
-		$submit.click(function(e){
-			
-			// retrieve current parent:
-			var $option = $("#pages_form select[name=parent]").find("option");
-			var $selected;
-			$option.each(function(){
-				if($(this).prop("selected")){
-					$selected = $(this);
-				}
-			});
-			var parent = $selected.attr("value");;
-			var oldParent = $("#pages_form select[name=parent]").find("option[selected='selected']").attr("value");
-			var action = $("input#submitForm").val();
-			var id = $("#tabs-common-details input#id").val();
-			var oldName = $("#tabs-common-details input#name").attr("value");
-			var newName = $("#tabs-common-details input#name").val();
-			var special = 0;
-			var $home = $("#tabs-advanced-options input[name='special\\[0\\]']");
-			if($home.prop("checked")){
-				special = 1; //"Home"
+		$submit.click(that.savePage);
+	};
+	
+	this.savePage = function(e){
+		
+		// retrieve current parent:
+		var $option = $("#pages_form select[name=parent]").find("option");
+		var $selected;
+		$option.each(function(){
+			if($(this).prop("selected")){
+				$selected = $(this);
 			}
-			var $hidden = $("#tabs-advanced-options input[name='special\\[1\\]']");
-			if($hidden.prop("checked")){
-				special += 2; //"isHidden"
-			}
-			var $options = $("#tabs-advanced-options select[name='page_vars[order_of_sub_pages]']").children();
-			var $options2 = $("#tabs-advanced-options select[name='page_vars[order_of_sub_pages_dir]']").children();
-
-			
-			var pageInfo = new Page();			
-			pageInfo.id = (id=="" || id=="undefined" || id < 0) ? 0 : id;
-			pageInfo.type = 0;
-			pageInfo.parentID = parent;
-			pageInfo.keywords = $("#tabs-advanced-options input#keywords").val();
-			pageInfo.description = $("#tabs-advanced-options input#description").val();
-			pageInfo.associatedDate = $("#tabs-common-details input#associated_date").val();
-			pageInfo.title 	= $("#tabs-common-details input#title").val();
-			pageInfo.body 	= CKEDITOR.instances.body.getData();
-			pageInfo.name 	= newName;
-			pageInfo.special = special;
-			
-			//TODO Page must be extended for these to fields
-			$options.each(function(){
-				if($(this).prop("selected")){
-					console.log("options : " + $(this).text() + " is selected");
-				}
-			});
-			$options2.each(function(){
-				if($(this).prop("selected")){
-					console.log("sub options : " + $(this).text() + " is selected");
-				}
-			});	
-			WSUtil.savePage(pageInfo, action, function(data){
-				var result = data.obj;
-				if(id <= 0 || id == ""){
-					id = result["id"];
-				}
-				if(oldParent != parent || oldName != newName){
-					var $leftMenu = $('div.left-menu');
-					$leftMenu.empty();
-					that.initMenu(id);
-				}
-			});
-			e.preventDefault();
-			return false;
 		});
+		var parent = $selected.attr("value");;
+		var oldParent = $("#pages_form select[name=parent]").find("option[selected='selected']").attr("value");
+		var action = $("input#submitForm").val();
+		var id = $("#tabs-common-details input#id").val();
+		var oldName = $("#tabs-common-details input#name").attr("value");
+		var newName = $("#tabs-common-details input#name").val();
+		var special = 0;
+		var $home = $("#tabs-advanced-options input[name='special\\[0\\]']");
+		if($home.prop("checked")){
+			special = 1; //"Home"
+		}
+		var $hidden = $("#tabs-advanced-options input[name='special\\[1\\]']");
+		if($hidden.prop("checked")){
+			special += 2; //"isHidden"
+		}
+		var $options = $("#tabs-advanced-options select[name='page_vars[order_of_sub_pages]']").children();
+		var $options2 = $("#tabs-advanced-options select[name='page_vars[order_of_sub_pages_dir]']").children();
+
+		
+		var pageInfo = new Page();			
+		pageInfo.id = (id=="" || id=="undefined" || id < 0) ? 0 : id;
+		pageInfo.type = 0;
+		pageInfo.parentID = parent;
+		pageInfo.keywords = $("#tabs-advanced-options input#keywords").val();
+		pageInfo.description = $("#tabs-advanced-options input#description").val();
+		pageInfo.associatedDate = $("#tabs-common-details input#associated_date").val();
+		pageInfo.title 	= $("#tabs-common-details input#title").val();
+		pageInfo.body 	= CKEDITOR.instances.body.getData();
+		pageInfo.name 	= newName;
+		pageInfo.special = special;
+		
+		//TODO Page must be extended for these to fields
+		$options.each(function(){
+			if($(this).prop("selected")){
+				console.log("options : " + $(this).text() + " is selected");
+			}
+		});
+		$options2.each(function(){
+			if($(this).prop("selected")){
+				console.log("sub options : " + $(this).text() + " is selected");
+			}
+		});	
+		WSUtil.savePage(pageInfo, action, function(data){
+			var result = data.obj;
+			if(id <= 0 || id == ""){
+				id = result["id"];
+			}
+			if(oldParent != parent || oldName != newName){
+				var $leftMenu = $('div.left-menu');
+				$leftMenu.empty();
+				that.initMenu(id);
+			}
+		});
+		e.preventDefault();
+		return false;
 	};
 	
 		/**

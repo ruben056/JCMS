@@ -1,5 +1,7 @@
 package rd.servlet.startup;
 
+import java.io.File;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -7,6 +9,8 @@ import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+
+import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
 
 import rd.mgr.layout.BasicLayoutEngine;
 import rd.mgr.layout.DefaultLayoutEngine;
@@ -45,7 +49,7 @@ public class StartupServlet extends HttpServlet {
 			logProps();
 			eMgr.getTransaction().commit();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			// TODO Auto-generated catch block			
 			e.printStackTrace();
 			eMgr.getTransaction().rollback();
 		} finally{
@@ -58,7 +62,7 @@ public class StartupServlet extends HttpServlet {
 	/**
 	* can be interesting to look at properties of the remote environment 
 	*/
-	private static void logProps(){
+	private  void logProps(){
 		Properties props = System.getProperties();
 		Iterator<Object> it = System.getProperties().keySet().iterator();
 		for (int i = 0; it.hasNext(); i++) {
@@ -66,6 +70,13 @@ public class StartupServlet extends HttpServlet {
 			String val = (String)props.getProperty(key);
 			System.out.println(i+1 + ". " + key + " = " + val);
 		}
+		File f= new File(".");
+		System.out.println("current file path : " + f.getAbsolutePath());
+		URL url = this.getClass().getClassLoader().getResource("/jcms.properties");
+		System.out.println("current file url : " + url.getPath());
+		url = this.getClass().getClassLoader().getResource("/plugins");
+		System.out.println("current file url : " + url.getPath());
+		
 	}
 	
 	private void testPages(EntityManager eMgr){

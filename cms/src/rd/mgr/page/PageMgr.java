@@ -17,6 +17,10 @@ public class PageMgr implements IPageMgr {
 		return savePages(new Page[]{page})[0];
 	}
 
+	/**
+	 * When saving make sure there is always exactly 1 page marked as homepage.
+	 *  
+	 */
 	@Override
 	public Page[] savePages( Page[] pages) {
 		
@@ -25,7 +29,7 @@ public class PageMgr implements IPageMgr {
 			return new Page[0];
 		}
 		
-		Vector<Long> homeIDs = new Vector<Long>(); 
+		Vector<Long> updateHomeIDs = new Vector<Long>(); 
 		for (int i = 0; i < pages.length; i++) {
 			Page page = pages[i];
 			if(page.getId() <= 0){
@@ -34,27 +38,29 @@ public class PageMgr implements IPageMgr {
 				DBUtil.getEntityMgr().merge(page);
 			}
 			if((page.getSpecial()&1) == 1)
-				homeIDs.add(page.getId());
+				updateHomeIDs.add(page.getId());
 		}
 		
 		/* check for exactly one home page, if multiple choose one of the new ones, if none make one of the new ones homepage */
 		Page[] homes = getHomePage();
-		if(homeIDs.size() > 0){
+		if(updateHomeIDs.size() > 0){
 			if(homes.length == 0){
 				pages[0].setSpecial(pages[0].getSpecial()|1);
 			}else if(homes.length > 1){
 				boolean foundHome = false;
 				for (int i = 0; i < homes.length; i++) {
 					Page cur = homes[i];
-					if(!foundHome && Arrays.binarySearch(homeIDs.toArray(new Long[homeIDs.size()]), cur.getId()) > 0){
+					if(!foundHome && Arrays.binarySearch(updateHomeIDs.toArray(new Long[updateHomeIDs.size()]), cur.getId()) >= 0){
 						foundHome = true;
-					}else if(i+1 < homes.length || !foundHome){
+					}else if(i+1 < homes.length || foundHome){
 						cur.setSpecial(cur.getSpecial()&0);
+						DBUtil.getEntityMgr().merge(cur);
 					}
 				}
 			}
 		}else{
 			pages[0].setSpecial(pages[0].getSpecial()|1);
+			DBUtil.getEntityMgr().merge(pages[0]);
 		}
 		
 		return pages;

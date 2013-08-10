@@ -50,6 +50,7 @@ public class RenderServlet extends HttpServlet {
 			eMgr.getTransaction().rollback();
 		} finally{
 			response.getWriter().write(result);
+			response.setContentType("text/html");
 			eMgr.close();
 		}
 	}

@@ -58,6 +58,7 @@ public class DefaultLayoutEngine implements ILayoutEngine {
 	
 	private String getMetaData(Page p){
 		StringBuffer metaData = new StringBuffer();
+		metaData.append("<meta charset=utf-8>");
 		metaData.append("<title>").append(
 				p.getTitle()== null ? p.getName(): p.getTitle()).append("</title>");
 		metaData.append("<script	src='http://code.jquery.com/jquery-1.9.1.js'></script>");

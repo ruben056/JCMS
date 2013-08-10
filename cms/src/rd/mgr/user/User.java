@@ -29,7 +29,7 @@ public class User {
 	@GenericGenerator(name="increment", strategy="increment")
 	private long id;
 	private String email;
-	private String password;
+	private String pass;
 	private boolean active = false;
 //	private String groups = ""; // json encoded string
 	private String activationKey;
@@ -49,7 +49,7 @@ public class User {
 	
 	public User(String email, String pass){
 		this(email);
-		this.password = pass;
+		this.pass = pass;
 	}
 	
 	public long getId() {
@@ -65,10 +65,10 @@ public class User {
 		this.email = email;
 	}
 	public String getPass() {
-		return password;
+		return pass;
 	}
 	public void setPass(String pass) {
-		this.password = pass;
+		this.pass = pass;
 	}
 	public boolean isActive() {
 		return active;

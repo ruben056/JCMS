@@ -12,4 +12,6 @@ http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
 	<bean id="LayoutMgr" class="rd.mgr.layout.LayoutMgr"></bean>
 	
+	<bean id="ImageMgr" class="rd.mgr.images.ImageMgr"></bean>
+	
 </beans>

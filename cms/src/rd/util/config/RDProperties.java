@@ -7,9 +7,9 @@ import java.util.Properties;
 
 public class RDProperties {
 
-	public static String GENERAL_JCMSROOT = "jcmsroot";
-	public static String CONTENT_UPLOAD_FOLDER = "content.uploadfolder";
-	public static String PLUGIN_DIR = "plugin.directory";
+//	public static String GENERAL_JCMSROOT = "jcmsroot";
+	public static String ABSOLUTE_UPLOAD_FOLDER = "content.uploadfolder";
+	public static String RELATIVE_UPLOAD_FOLDER = "relative.uploadfolder";
 	
 	private static Properties props = null;
 	
@@ -17,7 +17,7 @@ public class RDProperties {
 		if(props == null){
 			props = new Properties();
 			try {
-				InputStream is = ClassLoader.getSystemResourceAsStream("config/jcms.properties");
+				InputStream is = RDProperties.class.getClassLoader().getResourceAsStream("/jcms.properties");
 				props.load(new InputStreamReader(is));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

@@ -3,20 +3,39 @@
 
 	<target name="deploy" description="build and deploy the war file">
 		<delete dir="/usr/share/tomcat7/webapps/cms"></delete>
-		<delete file="/usr/share/tomcat7/webapps/cms.war"></delete>		
+		<delete file="/usr/share/tomcat7/webapps/cms.war"></delete>
+		
+		<copy file="/home/ruben/Documents/Java/workspace/cms/WebContent/META-INF/context.xml.local"
+		 	tofile="/home/ruben/Documents/Java/workspace/cms/WebContent/META-INF/context.xml" overwrite="yes"/>
+		
+		<copy file="/home/ruben/Documents/Java/workspace/cms/config/local/jcms.properties"
+			todir="/home/ruben/Documents/Java/workspace/cms/build/classes" overwrite="yes"/>
+		<mkdir dir="/home/ruben/Documents/Java/workspace/cms/build/classes/plugins"/>
+		<copydir  src="/home/ruben/Documents/Java/workspace/cms/config/plugins"
+			dest="/home/ruben/Documents/Java/workspace/cms/build/classes/plugins"></copydir>
 		<antcall target="makeWar"/>
-		<move file="/home/ruben/Documents/Java/workspace/cms/dist/cms.war" todir="/usr/share/tomcat7/webapps">
-		</move>
+		<copy file="/home/ruben/Documents/Java/workspace/cms/dist/cms.war" todir="/usr/share/tomcat7/webapps">
+		</copy>
 		<antcall target="restartTomcat7"/>
+		<delete file="/home/ruben/Documents/Java/workspace/cms/build/classes/jcms.properties" />
+		<delete dir="/home/ruben/Documents/Java/workspace/cms/build/classes/plugins" />
 	</target>
 
-	<target name="moveForOpenShift" description="build and deploy the war file">			
-			<antcall target="makeWar"/>
-			<move file="/home/ruben/Documents/Java/workspace/cms/dist/cms.war" todir="/home/ruben/Documents/Java/openshift/rd/webapps">
-			</move>
-			<exec executable="/bin/bash">
-					<arg value="/home/ruben/Documents/Java/openshift/rd/deploy" />
-			</exec>
+	<target name="moveForOpenShift" description="build and deploy the war file">
+		
+		<copy file="/home/ruben/Documents/Java/workspace/cms/config/openshift/jcms.properties"
+			todir="/home/ruben/Documents/Java/workspace/cms/build/classes" overwrite="yes"/>		
+		<copy file="/home/ruben/Documents/Java/workspace/cms/WebContent/META-INF/context.xml.openshift"
+			tofile="/home/ruben/Documents/Java/workspace/cms/WebContent/META-INF/context.xml" overwrite="yes"/>
+		
+		<mkdir dir="/home/ruben/Documents/Java/workspace/cms/build/classes/plugins"/>
+		<copydir dest="/home/ruben/Documents/Java/workspace/cms/build/classes/plugins" 
+			src="/home/ruben/Documents/Java/workspace/cms/config/plugins"></copydir>
+		<antcall target="makeWar"/>
+		<copy file="/home/ruben/Documents/Java/workspace/cms/dist/cms.war" todir="/home/ruben/Documents/Java/openshift/rd/webapps">
+		</copy>
+		<delete file="/home/ruben/Documents/Java/workspace/cms/build/classes/jcms.properties" />
+		<delete dir="/home/ruben/Documents/Java/workspace/cms/build/classes/plugins" />
 	</target>
 	
 	<target name="makeWar">
@@ -28,7 +47,7 @@
 			<classes dir="build/classes" />
 		</war>
 	</target>
-
+	
 	<target name="restartTomcat7">
 		<exec executable="/bin/bash">
 			<arg value="/home/ruben/myScripts/restartTomcat7.sh" />
