@@ -19,7 +19,6 @@ public class PageMgr implements IPageMgr {
 
 	/**
 	 * When saving make sure there is always exactly 1 page marked as homepage.
-	 *  
 	 */
 	@Override
 	public Page[] savePages( Page[] pages) {
