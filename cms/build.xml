@@ -1,41 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="cms" default="makeWar" basedir=".">
 
+    <!--TODO move these to property file-->
+    <property name="cmsHome" value="/home/ruben/projects/jCmS/JCMS/cms"/>
+    <property name="tomcatHome" value="/home/ruben/tomcat7"/>
+
 	<target name="deploy" description="build and deploy the war file">
-		<delete dir="/usr/share/tomcat7/webapps/cms"></delete>
-		<delete file="/usr/share/tomcat7/webapps/cms.war"></delete>
+		<delete dir="${tomcatHome}/webapps/cms"></delete>
+		<delete file="${tomcatHome}/webapps/cms.war"></delete>
 		
-		<copy file="/home/ruben/Documents/Java/workspace/cms/WebContent/META-INF/context.xml.local"
-		 	tofile="/home/ruben/Documents/Java/workspace/cms/WebContent/META-INF/context.xml" overwrite="yes"/>
+		<copy file="${cmsHome}/WebContent/META-INF/context.xml.local"
+		 	tofile="${cmsHome}/WebContent/META-INF/context.xml" overwrite="yes"/>
 		
-		<copy file="/home/ruben/Documents/Java/workspace/cms/config/local/jcms.properties"
-			todir="/home/ruben/Documents/Java/workspace/cms/build/classes" overwrite="yes"/>
-		<mkdir dir="/home/ruben/Documents/Java/workspace/cms/build/classes/plugins"/>
-		<copydir  src="/home/ruben/Documents/Java/workspace/cms/config/plugins"
-			dest="/home/ruben/Documents/Java/workspace/cms/build/classes/plugins"></copydir>
+		<copy file="${cmsHome}/config/local/jcms.properties"
+			todir="${cmsHome}/build/classes" overwrite="yes"/>
+		<mkdir dir="${cmsHome}/build/classes/plugins"/>
+		<copydir  src="${cmsHome}/config/plugins"
+			dest="${cmsHome}/build/classes/plugins"></copydir>
 		<antcall target="makeWar"/>
-		<copy file="/home/ruben/Documents/Java/workspace/cms/dist/cms.war" todir="/usr/share/tomcat7/webapps">
+		<copy file="${cmsHome}/dist/cms.war" todir="${tomcatHome}/webapps">
 		</copy>
-		<antcall target="restartTomcat7"/>
-		<delete file="/home/ruben/Documents/Java/workspace/cms/build/classes/jcms.properties" />
-		<delete dir="/home/ruben/Documents/Java/workspace/cms/build/classes/plugins" />
+        <!--when this exist again uncomment-->
+		<!--<antcall target="restartTomcat7"/>-->
+		<delete file="${cmsHome}/build/classes/jcms.properties" />
+		<delete dir="${cmsHome}/build/classes/plugins" />
 	</target>
 
 	<target name="moveForOpenShift" description="build and deploy the war file">
 		
-		<copy file="/home/ruben/Documents/Java/workspace/cms/config/openshift/jcms.properties"
-			todir="/home/ruben/Documents/Java/workspace/cms/build/classes" overwrite="yes"/>		
-		<copy file="/home/ruben/Documents/Java/workspace/cms/WebContent/META-INF/context.xml.openshift"
-			tofile="/home/ruben/Documents/Java/workspace/cms/WebContent/META-INF/context.xml" overwrite="yes"/>
+		<copy file="${cmsHome}/config/openshift/jcms.properties"
+			todir="${cmsHome}/build/classes" overwrite="yes"/>		
+		<copy file="${cmsHome}/WebContent/META-INF/context.xml.openshift"
+			tofile="${cmsHome}/WebContent/META-INF/context.xml" overwrite="yes"/>
 		
-		<mkdir dir="/home/ruben/Documents/Java/workspace/cms/build/classes/plugins"/>
-		<copydir dest="/home/ruben/Documents/Java/workspace/cms/build/classes/plugins" 
-			src="/home/ruben/Documents/Java/workspace/cms/config/plugins"></copydir>
+		<mkdir dir="${cmsHome}/build/classes/plugins"/>
+		<copydir dest="${cmsHome}/build/classes/plugins" 
+			src="${cmsHome}/config/plugins"></copydir>
 		<antcall target="makeWar"/>
-		<copy file="/home/ruben/Documents/Java/workspace/cms/dist/cms.war" todir="/home/ruben/Documents/Java/openshift/rd/webapps">
+		<copy file="${cmsHome}/dist/cms.war" todir="/home/ruben/Documents/Java/openshift/rd/webapps">
 		</copy>
-		<delete file="/home/ruben/Documents/Java/workspace/cms/build/classes/jcms.properties" />
-		<delete dir="/home/ruben/Documents/Java/workspace/cms/build/classes/plugins" />
+		<delete file="${cmsHome}/build/classes/jcms.properties" />
+		<delete dir="${cmsHome}/build/classes/plugins" />
 	</target>
 	
 	<target name="makeWar">
@@ -47,12 +52,13 @@
 			<classes dir="build/classes" />
 		</war>
 	</target>
-	
-	<target name="restartTomcat7">
-		<exec executable="/bin/bash">
-			<arg value="/home/ruben/myScripts/restartTomcat7.sh" />
-		</exec>
-	</target>
+
+    <!--TODO recreate this script-->
+	<!--<target name="restartTomcat7">-->
+		<!--<exec executable="/bin/bash">-->
+			<!--<arg value="/home/ruben/myScripts/restartTomcat7.sh" />-->
+		<!--</exec>-->
+	<!--</target>-->
 
 	<!-- <target name="makeJar">
 		<mkdir dir="dist"/>
